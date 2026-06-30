@@ -56,7 +56,31 @@ public class ModButtons
 
         },
 
+        new ButtonInfo[] { // Admin
+            new ButtonInfo { buttonText = "Return to Main", method =() => activeCategory = 0, isTogglable = false, categoryName = "Admin"},
+
+        },
+
+        new ButtonInfo[] { // Super Admin
+            new ButtonInfo { buttonText = "Return to Main", method =() => activeCategory = 0, isTogglable = false, categoryName = "SuperAdmin"},
+
+        },
     };
+
+    // yes
+    public static int FindCategory(string name)
+    {
+        for (int i = 0; i < ModButtons.buttons.Length; i++)
+        {
+            foreach (ButtonInfo button in ModButtons.buttons[i])
+            {
+                if (button.categoryName == name)
+                    return i;
+            }
+        }
+
+        return -1;
+    }
 
     public static List<ButtonInfo> GetActiveMods()
     {

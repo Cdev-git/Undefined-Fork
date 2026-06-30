@@ -120,4 +120,6 @@ public class ButtonInfo
     public bool enabled = false;
     public bool isTogglable = true;
     public string toolTip = "";
+
+    public string categoryName = null;
 }

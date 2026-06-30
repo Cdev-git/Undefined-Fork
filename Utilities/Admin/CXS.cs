@@ -1,4 +1,5 @@
 using BepInEx;
+using CXS;
 using ExitGames.Client.Photon;
 using GorillaLocomotion;
 using GorillaNetworking;
@@ -7,7 +8,6 @@ using HarmonyLib;
 using Photon.Pun;
 using Photon.Realtime;
 using Photon.Voice.Unity;
-using CXS;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -18,22 +18,24 @@ using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 using TMPro;
+using Undefined.Utilities;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
 using UnityEngine.UI;
 using UnityEngine.Video;
+using static Mono.Security.X509.X520;
+using static Undefined.Constants;
 using JoinType = GorillaNetworking.JoinType;
 using Random = UnityEngine.Random;
-using static Undefined.Constants;
 
 namespace CXS;
 
 public class CXS : MonoBehaviour
 {
     #region Configuration
-    public static string MenuName = "CXS";
+    public static string MenuName = "Undefined";
     public static string MenuVersion = PluginVersion;
 
     public static string CXSResourceLocation = "CXS";
@@ -42,9 +44,16 @@ public class CXS : MonoBehaviour
 
     public static bool DisableMenu;
 
-    public static void SendNotification(string text, int sendTime = 1000) { } // Put your notify code here
+    public static void SendNotification(string message, float duration = 3f)
+    {
+        NotificationLib.SendNotification(
+            NotificationLib.NotificationType.Alert,
+            message,
+            duration
+        );
+    }
 
-    public static void TeleportPlayer(Vector3 position) // Only modify this if you need any special logic
+    public static void TeleportPlayer(Vector3 position)
     {
         GTPlayer.Instance.TeleportTo(World2Player(position), GTPlayer.Instance.transform.rotation, true);
         VRRig.LocalRig.transform.position = position;
@@ -69,7 +78,7 @@ public class CXS : MonoBehaviour
 
     public static void ConfirmUsing(string id, string version, string menuName) { } // Put your code ran on isusing here
 
-    public static void Log(string text) => // Method used to log info, replace if using a custom logger
+    public static void Log(string text) =>
         Debug.Log(text);
 
     #endregion

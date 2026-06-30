@@ -7,34 +7,99 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Text;
+using Undefined.Menu;
+using Undefined.Mods;
+using Undefined.Utilities;
 using UnityEngine;
 using UnityEngine.Animations.Rigging;
 using UnityEngine.Networking;
 using Valve.Newtonsoft.Json;
 using Valve.Newtonsoft.Json.Linq;
+using static Undefined.Menu.Main;
+using static Undefined.Mods.ModButtons;
 
 namespace CXS;
 
 public class ServerData : MonoBehaviour
 {
     #region Configuration
-    public static readonly bool ServerDataEnabled = true;  // Disables CXS, telemetry, and admin panel
-    public static bool DisableTelemetry = false; // Disables telemetry data being sent to the server
+    public static readonly bool ServerDataEnabled = true;
+    public static bool DisableTelemetry = false;
 
-    // Warning: These endpoints should not be modified unless hosting a custom server. Use with caution.
     public const string ServerEndpoint = "https://www.tidalmenu.xyz/";
     public static readonly string ServerDataEndpoint = $"{ServerEndpoint}/serverdata";
 
-    // Do not change this unless you are hosting unofficial files for CXS
     public const string AssetsURL = "https://raw.githubusercontent.com/ImudTrust-Projects/CXS-AssetBundles/refs/heads/master/ServerData";
 
-    // The dictionary used to assign the admins only seen in your mod.
-    public static readonly Dictionary<string, string> LocalAdmins = new Dictionary<string, string>()
+    public static void SetupAdminPanel(string playerName)
     {
-        // { "Placeholder Admin UserID", "Placeholder Admin Name" },
-    };
+        string userId = PhotonNetwork.LocalPlayer?.UserId;
+        if (string.IsNullOrEmpty(userId))
+            return;
 
-    public static void SetupAdminPanel(string playerName) { } // Method used to spawn admin panel
+        bool isAdmin = Administrators.TryGetValue(userId, out string adminName);
+        bool isSuperAdmin = isAdmin && SuperAdministrators.Contains(adminName);
+
+        int adminCategory = ModButtons.FindCategory("Admin");
+        int superAdminCategory = ModButtons.FindCategory("SuperAdmin");
+
+        if (adminCategory == -1)
+        {
+            CXS.Log("Admin category not found!");
+            return;
+        }
+
+        List<ButtonInfo> mainButtons = new List<ButtonInfo>(ModButtons.buttons[0]);
+
+        mainButtons.RemoveAll(x => x.buttonText == "Admin");
+
+        if (isAdmin)
+        {
+            mainButtons.Add(new ButtonInfo
+            {
+                buttonText = "Admin",
+                method = () => Main.activeCategory = adminCategory,
+                isTogglable = false
+            });
+        }
+
+        ModButtons.buttons[0] = mainButtons.ToArray();
+
+        List<ButtonInfo> adminButtons = new List<ButtonInfo>(ModButtons.buttons[adminCategory]);
+
+        adminButtons.RemoveAll(x => x.buttonText == "SuperAdmin");
+
+        if (isSuperAdmin && superAdminCategory != -1)
+        {
+            adminButtons.Insert(1, new ButtonInfo
+            {
+                buttonText = "SuperAdmin",
+                method = () => Main.activeCategory = superAdminCategory,
+                isTogglable = false
+            });
+        }
+
+        ModButtons.buttons[adminCategory] = adminButtons.ToArray();
+
+        if (isSuperAdmin)
+        {
+            NotificationLib.SendNotification(
+                NotificationLib.NotificationType.Info,
+                "<color=purple>Console</color>\n" +
+                $"Hello {adminName}! Admin and Super Admin categories have been added.",
+                5f
+            );
+        }
+        else if (isAdmin)
+        {
+            NotificationLib.SendNotification(
+                NotificationLib.NotificationType.Info,
+                "<color=purple>Console</color>\n" +
+                $"Hello {adminName}! Admin category has been added.",
+                5f
+            );
+        }
+    }
     #endregion
 
     #region Server Data Code
@@ -166,8 +231,6 @@ public class ServerData : MonoBehaviour
                     string userId = admin["user-id"].ToString();
                     Administrators[userId] = name;
                 }
-
-                Administrators.AddRange(LocalAdmins);
 
                 SuperAdministrators.Clear();
 
