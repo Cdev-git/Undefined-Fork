@@ -313,6 +313,8 @@ public class NotificationLib : MonoBehaviour
 
     public void UpdateArrayList()
     {
+
+
         if (!_hasInitialized)
             Init();
 

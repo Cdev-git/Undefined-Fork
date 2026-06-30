@@ -74,6 +74,25 @@ public class Variables
         return PhotonNetwork.InRoom && PhotonNetwork.IsMasterClient;
     }
 
+    public static void RPCProtection()
+    {
+        if (!PhotonNetwork.InRoom)
+            return;
+
+        try
+        {
+            MonkeAgent.instance.rpcErrorMax = int.MaxValue;
+            MonkeAgent.instance.rpcCallLimit = int.MaxValue;
+            MonkeAgent.instance.logErrorMax = int.MaxValue;
+
+            PhotonNetwork.MaxResendsBeforeDisconnect = int.MaxValue;
+            PhotonNetwork.QuickResends = int.MaxValue;
+
+            PhotonNetwork.SendAllOutgoingCommands();
+        }
+        catch { Debug.Log("RPC protection failed, are you in a lobby?"); }
+    }
+
 
     // gun lib stuff
 
