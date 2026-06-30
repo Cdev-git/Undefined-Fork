@@ -17,8 +17,8 @@ public class Button : MonoBehaviour
 		{
                 buttonCooldown = Time.time + 0.2f;
                 GorillaTagger.Instance.StartVibration(rightHanded, GorillaTagger.Instance.tagHapticStrength / 2f, GorillaTagger.Instance.tagHapticDuration / 2f);
-                VRRig.LocalRig.PlayHandTapLocal(8, rightHanded, 0.4f);
-			ProcessClick(this.relatedText);
-            }
+				AudioHandler.Play("click3", 0.5f);
+            ProcessClick(this.relatedText);
+        }
 	}
 }

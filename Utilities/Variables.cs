@@ -1,4 +1,5 @@
-﻿using Photon.Pun;
+﻿using GorillaLocomotion;
+using Photon.Pun;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -19,29 +20,39 @@ public class Variables
     public static int activePage = 0;
     public static int categoryIndex;
 
-    public static bool fpsCounter = true;
+    public static bool fpsCounter = false;
     public static bool disconnectButton = true;
     public static bool rightHanded;
-    public static bool disableNotifications;
+
+    public static bool rainbowOutline = true;
+    public static float outlineSpeed = 0.5f;
+
+    public static bool pcMenu = true;
+
+    public static bool UseMinecraftFont = false; // this is a test
 
     public static KeyCode keyboardButton = KeyCode.X;
 
-    public static Vector3 menuSize = new Vector3(0.1f, 1.8f, 0.65f);
+    public static Vector3 menuSize = new Vector3(0.13f, 1f, 1f); // Depth, width, height
 
     public static int buttonsPerPage = 8;
 
     public static float gradientSpeed = 0.5f;
 
-    public static readonly int TransparentFX = LayerMask.NameToLayer("TransparentFX");
-    public static readonly int IgnoreRaycast = LayerMask.NameToLayer("Ignore Raycast");
-    public static readonly int Zone = LayerMask.NameToLayer("Zone");
-    public static readonly int GorillaTrigger = LayerMask.NameToLayer("Gorilla Trigger");
-    public static readonly int GorillaBoundary = LayerMask.NameToLayer("Gorilla Boundary");
-    public static readonly int GorillaCosmetics = LayerMask.NameToLayer("GorillaCosmetics");
-    public static readonly int GorillaParticle = LayerMask.NameToLayer("GorillaParticle");
+    private static int? noInvisLayerMask;
+    public static int NoInvisLayerMask()
+    {
+        noInvisLayerMask ??= ~(
+            1 << LayerMask.NameToLayer("TransparentFX") |
+            1 << LayerMask.NameToLayer("Ignore Raycast") |
+            1 << LayerMask.NameToLayer("Zone") |
+            1 << LayerMask.NameToLayer("Gorilla Trigger") |
+            1 << LayerMask.NameToLayer("Gorilla Boundary") |
+            1 << LayerMask.NameToLayer("GorillaCosmetics") |
+            1 << LayerMask.NameToLayer("GorillaParticle"));
 
-    public static int NoInvisLayerMask() =>
-        ~(1 << TransparentFX | 1 << IgnoreRaycast | 1 << Zone | 1 << GorillaTrigger | 1 << GorillaBoundary | 1 << GorillaCosmetics | 1 << GorillaParticle);
+        return noInvisLayerMask ?? GTPlayer.Instance.locomotionEnabledLayers;
+    }
 
     public static Vector3 RandomVector3(float range = 1f)
     {
@@ -97,6 +108,7 @@ public class Variables
     internal bool isTriggered;
     internal bool isLocked;
 }
+
 
 public class ButtonInfo
 {

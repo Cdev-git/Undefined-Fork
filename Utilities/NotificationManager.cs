@@ -8,6 +8,7 @@ using UnityEngine.UI;
 using static Undefined.Mods.ModButtons;
 using static Undefined.MENUSETTINGS.Settings;
 using Undefined.Mods;
+using static Undefined.Utilities.Variables;
 
 namespace Undefined.Utilities;
 
@@ -348,6 +349,8 @@ public class NotificationLib : MonoBehaviour
         _notificationTimestamps[text] = Time.time;
         PreviousNotification = text;
 
+        AudioHandler.Play("NotificationSound", 0.5f);
+
         Instance.UpdateNotificationText();
         Instance.StartCoroutine(Instance.FadeInNotification());
     }
@@ -366,7 +369,10 @@ public class NotificationLib : MonoBehaviour
         if (Instance == null)
             return;
 
-        Font font = currentFont;
+        Font font = UseMinecraftFont
+            ? FontManager.GetFont("Minecraft")
+            : FontManager.GetFont("Arial");
+
         if (font == null)
             return;
 

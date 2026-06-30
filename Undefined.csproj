@@ -11,6 +11,26 @@
     <StartArguments>steam://run/1533390</StartArguments>
   </PropertyGroup>
 
+  <ItemGroup>
+    <None Remove="Resources\Embedded\click1.wav" />
+    <None Remove="Resources\Embedded\click2.wav" />
+    <None Remove="Resources\Embedded\click3.wav" />
+    <None Remove="Resources\Embedded\Close.wav" />
+    <None Remove="Resources\Embedded\minecraftfont" />
+    <None Remove="Resources\Embedded\NotificationSound.wav" />
+    <None Remove="Resources\Embedded\Open.wav" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Embedded\click1.wav" />
+    <EmbeddedResource Include="Resources\Embedded\click2.wav" />
+    <EmbeddedResource Include="Resources\Embedded\click3.wav" />
+    <EmbeddedResource Include="Resources\Embedded\Close.wav" />
+    <EmbeddedResource Include="Resources\Embedded\minecraftfont" />
+    <EmbeddedResource Include="Resources\Embedded\NotificationSound.wav" />
+    <EmbeddedResource Include="Resources\Embedded\Open.wav" />
+  </ItemGroup>
+
   <!-- AssemblyPublicizer usage inspired from GorillaShirts -->
   <ItemGroup>
     <PackageReference Include="BepInEx.AssemblyPublicizer.MSBuild" Version="0.4.3">
@@ -551,5 +571,9 @@
     <Reference Include="ZString">
       <HintPath>$(GameAssemblyPath)\ZString.dll</HintPath>
     </Reference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Resources\Sounds\" />
   </ItemGroup>
 </Project>

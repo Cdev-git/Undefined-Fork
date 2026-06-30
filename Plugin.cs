@@ -27,6 +27,8 @@ public class Plugin : BaseUnityPlugin
     {
         CXS.CXS.LoadCXS();
 
+        AudioHandler.LoadSounds();
+
         harmony = new Harmony(Constants.PluginGUID);
         harmony.PatchAll();
     }
