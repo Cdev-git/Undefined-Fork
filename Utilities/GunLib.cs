@@ -190,9 +190,11 @@ namespace Undefined.Utilities
 
         public static void StartVrGun(Action action, bool LockOn)
         {
-            if (!ControllerInputPoller.instance.rightGrab)
+            if (!InputHandler.Instance.RightGrip.IsPressed)
             {
-                if (spherepointer != null) CleanupPointer();
+                if (spherepointer != null)
+                    CleanupPointer();
+
                 return;
             }
 
@@ -222,14 +224,15 @@ namespace Undefined.Utilities
 
             HandleLineRendering();
 
-            if (ControllerInputPoller.instance.rightControllerIndexFloat > 0.5f)
+            if (InputHandler.Instance.RightTrigger.IsPressed)
             {
                 spherepointer.GetComponent<Renderer>().material.color = GunConfig.TriggeredPointerColorStart;
 
                 if (LockOn && LockedRigOrPlayerOrwhatever != null)
                 {
                     action.Invoke();
-                    if (GunConfig.EnableBoxESP) BoxESP();
+                    if (GunConfig.EnableBoxESP)
+                        BoxESP();
                 }
                 else if (!LockOn)
                 {

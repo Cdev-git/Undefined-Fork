@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
+using Undefined.Utilities;
 using UnityEngine;
 
 namespace Undefined.Mods.Categories;
@@ -23,7 +24,7 @@ public class Room
     }
     public static void PrimaryDisconnect()
     {
-        if (ControllerInputPoller.instance.rightControllerPrimaryButton | UnityInput.Current.GetKey(KeyCode.F))
+        if (InputHandler.Instance.RightPrimary.WasPressed | UnityInput.Current.GetKey(KeyCode.F))
         {
             PhotonNetwork.Disconnect();
         }

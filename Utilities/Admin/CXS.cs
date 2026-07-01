@@ -859,6 +859,7 @@ _________ ____  ___  _________
         {
             switch (buttton)
             {
+                // Im going to keep this as the default
                 case "lGrip": ControllerInputPoller.instance.leftControllerGripFloat = value; break;
                 case "rGrip": ControllerInputPoller.instance.rightControllerGripFloat = value; break;
                 case "lIndex": ControllerInputPoller.instance.leftControllerIndexFloat = value; break;

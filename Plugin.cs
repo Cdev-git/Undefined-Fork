@@ -8,7 +8,6 @@ using Undefined.Menu;
 using Undefined.Utilities;
 using UnityEngine;
 using UnityEngine.Networking;
-using Valve.Newtonsoft.Json.Linq;
 using JObject = Newtonsoft.Json.Linq.JObject;
 
 namespace Undefined;
@@ -132,6 +131,8 @@ public class Plugin : BaseUnityPlugin
 
         Version current = new Version(Constants.PluginVersion);
 
+        string buildType = Constants.BetaBuild ? "Beta Build" : "Release Build";
+
 
 
         if (current < minimumVersion)
@@ -140,7 +141,7 @@ public class Plugin : BaseUnityPlugin
 
             NotificationLib.SendNotification(
                 NotificationLib.NotificationType.Error,
-                "Your Undefined version is outdated. Please update the menu."
+                $"Your Undefined {buildType} version is outdated. Please update the menu."
             );
 
             yield break;
@@ -154,7 +155,7 @@ public class Plugin : BaseUnityPlugin
 
             NotificationLib.SendNotification(
                 NotificationLib.NotificationType.Error,
-                "Modified or invalid Undefined version detected. Please download the official version."
+                $"Modified or invalid Undefined {buildType} detected. Please download the official version."
             );
 
             yield break;
@@ -168,7 +169,7 @@ public class Plugin : BaseUnityPlugin
             {
                 NotificationLib.SendNotification(
                     NotificationLib.NotificationType.Alert,
-                    $"Undefined update available.\nLatest: {latestVersion}\nCurrent: {current}"
+                    $"Undefined {buildType} update available.\nLatest: {latestVersion}\nCurrent: {current}"
                 );
             }
 
@@ -183,7 +184,7 @@ public class Plugin : BaseUnityPlugin
         {
             NotificationLib.SendNotification(
                 NotificationLib.NotificationType.Info,
-                "Undefined is up to date!"
+                $"Undefined {buildType} is up to date!"
             );
         }
 

@@ -34,7 +34,50 @@ public class Movement
     public static float subThingy;
     public static float subThingyZ;
 
-    public static float FlySpeed = 10f;
+    public static float FlySpeed = 10f; // this is very bad, but it works for now. I will fix this later
+
+    public static void Fly()
+    {
+        if (InputHandler.Instance.RightPrimary.IsPressed)
+        {
+            GTPlayer.Instance.transform.position += GorillaTagger.Instance.headCollider.transform.forward * (Time.deltaTime * FlySpeed);
+            GorillaTagger.Instance.rigidbody.linearVelocity = Vector3.zero;
+        }
+    }
+
+    public static void TPSTUMP()
+    {
+        Noclipistuff(true);
+        GTPlayer.Instance.TeleportTo(new Vector3(-68.647f, 12.406f, -83.699f), GTPlayer.Instance.transform.rotation, false, true);
+        GorillaTagger.Instance.rigidbody.linearVelocity = Vector3.zero;
+        Noclipistuff(false);
+    }
+
+    public static void NoClip()
+    {
+        bool DisableColliders = InputHandler.Instance.RightPrimary.IsPressed;
+        MeshCollider[] colliders = Resources.FindObjectsOfTypeAll<MeshCollider>();
+
+        foreach (MeshCollider collider in colliders)
+        {
+            collider.enabled = !DisableColliders;
+        }
+
+    }
+
+    public static void Bouncy()
+    {
+        GorillaTagger.Instance.bodyCollider.material.bounciness = 1f;
+        GorillaTagger.Instance.bodyCollider.material.bounceCombine = (PhysicsMaterialCombine)3;
+        GorillaTagger.Instance.bodyCollider.material.dynamicFriction = 0f;
+    }
+
+    public static void ResetBouncy()
+    {
+        GorillaTagger.Instance.bodyCollider.material.bounciness = 0f;
+        GorillaTagger.Instance.bodyCollider.material.bounceCombine = 0;
+        GorillaTagger.Instance.bodyCollider.material.dynamicFriction = 0f;
+    }
 
     public static void WASDFly()
     {

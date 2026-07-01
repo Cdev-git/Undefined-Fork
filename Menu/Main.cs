@@ -1,16 +1,19 @@
 using BepInEx;
+using GorillaExtensions;
 using GorillaLocomotion;
 using HarmonyLib;
-using Undefined.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using TMPro;
+using Undefined.Utilities;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
+using UnityEngine.Video;
 using UnityEngine.XR;
-using static Undefined.Mods.ModButtons;
 using static Undefined.MENUSETTINGS.Settings;
+using static Undefined.Mods.ModButtons;
 using static Undefined.Utilities.Variables;
 
 namespace Undefined.Menu;
@@ -34,9 +37,9 @@ public class Main : MonoBehaviour
     {
         try
         {
-            bool openRequested = (!rightHanded && ControllerInputPoller.instance.leftControllerSecondaryButton) ||
-                                 (rightHanded && ControllerInputPoller.instance.rightControllerSecondaryButton);
-
+            bool openRequested = (!rightHanded && InputHandler.Instance.LeftSecondary.IsPressed) ||
+                                 (rightHanded && InputHandler.Instance.RightSecondary.IsPressed);
+            
             bool keyboardOpen = pcMenu && UnityInput.Current.GetKey(keyboardButton);
 
             if (activeMenu == null)
@@ -58,8 +61,8 @@ public class Main : MonoBehaviour
                 {
                     PositionMenu(rightHanded, keyboardOpen);
 
-                    bool leftTrig = ControllerInputPoller.instance.leftControllerIndexFloat > 0.5f;
-                    bool rightTrig = ControllerInputPoller.instance.rightControllerIndexFloat > 0.5f;
+                    bool leftTrig = InputHandler.Instance.LeftTrigger.WasPressed;
+                    bool rightTrig = InputHandler.Instance.RightTrigger.WasPressed;
 
                     if (leftTrig && !prevLeftTrigger)
                     {
@@ -120,6 +123,108 @@ public class Main : MonoBehaviour
         catch (Exception ex)
         {
             Debug.LogError($"{Constants.PluginName} Mods Exec Flow Err: {ex.Message}");
+        }
+
+        try
+        {
+            if (GameObject.Find("Environment Objects/LocalObjects_Prefab/TreeRoom") == null)
+                return;
+
+            if (hasSetupFeaturedMapVideo && videoPlayer != null && !videoPlayer.isPlaying &&
+                videoPlayer.gameObject.activeInHierarchy && videoPlayer.enabled)
+            {
+                videoPlayer.Play();
+            }
+
+            if (hasSetupFeaturedMapVideo)
+                return;
+
+            GameObject loadingText = GameObject.Find(
+                "Environment Objects/LocalObjects_Prefab/TreeRoom/LoadingText");
+
+            GameObject mapInfoText = GameObject.Find(
+                "Environment Objects/LocalObjects_Prefab/TreeRoom/MapInfo_TMP");
+
+            GameObject featuredMaps = GameObject.Find(
+                "Environment Objects/LocalObjects_Prefab/TreeRoom/ModIOFeaturedMapsDisplay");
+
+            GameObject displayTextObj = GameObject.Find(
+                "Environment Objects/LocalObjects_Prefab/TreeRoom/ModIOFeaturedMapsDisplay/DisplayText");
+
+
+            if (displayTextObj != null)
+            {
+                foreach (Transform child in displayTextObj.transform)
+                {
+                    if (child.name.ToLower().EndsWith("tmp"))
+                        child.gameObject.SetActive(true);
+                }
+            }
+
+
+            if (mapInfoText == null || featuredMaps == null)
+                return;
+
+
+            TextMeshPro text = mapInfoText.GetComponent<TextMeshPro>();
+
+            if (text != null)
+                text.text = "<color=black>Undefined</color>";
+
+
+            if (loadingText != null)
+                loadingText.Obliterate();
+
+
+            GameObject featuredMapImage = featuredMaps.transform.Find("FeaturedMapImage")?.gameObject;
+
+            if (featuredMapImage == null)
+                return;
+
+
+            if (featuredMapImage.TryGetComponent(out SpriteRenderer spriteRenderer))
+                spriteRenderer.Obliterate();
+
+
+            MeshFilter mf = featuredMapImage.GetOrAddComponent<MeshFilter>();
+            mf.mesh = Resources.GetBuiltinResource<Mesh>("Quad.fbx");
+
+
+            MeshRenderer mr = featuredMapImage.GetOrAddComponent<MeshRenderer>();
+
+            Material mat = new Material(Shader.Find("Unlit/Texture"));
+            mr.material = mat;
+
+
+            videoPlayer = featuredMapImage.GetComponent<VideoPlayer>();
+
+            if (videoPlayer == null)
+                videoPlayer = featuredMapImage.AddComponent<VideoPlayer>();
+
+
+            videoPlayer.audioOutputMode = VideoAudioOutputMode.None;
+            videoPlayer.url = "https://github.com/ImudTrust/Mod-Resources/raw/refs/heads/main/%C3%B6.mp4";
+            videoPlayer.isLooping = true;
+
+
+            RenderTexture rt = new RenderTexture(512, 512, 0);
+
+            videoPlayer.targetTexture = rt;
+            mr.material.mainTexture = rt;
+
+
+            featuredMapImage.transform.localScale = new Vector3(0.845f, 0.445f, 1f);
+
+            featuredMapImage.SetActive(true);
+
+            videoPlayer.Play();
+
+            hasSetupFeaturedMapVideo = true;
+
+        }
+        catch (Exception ex)
+        {
+            Debug.LogError($"Promotion Video Error: {ex.Message}");
         }
     }
 

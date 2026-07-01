@@ -14,11 +14,11 @@ public class ModButtons
     public static ButtonInfo[][] buttons = new ButtonInfo[][]
     {
         new ButtonInfo[] { // Main Mods [0]
-            new ButtonInfo { buttonText = "Settings", method =() => activeCategory = 1, isTogglable = false, }, // toolTip = "Opens the main settings page for the menu."
+            new ButtonInfo { buttonText = "Settings", method =() => activeCategory = 1, isTogglable = false, },
 
-            new ButtonInfo { buttonText = "Room Mods", method =() => activeCategory = 3, isTogglable = false, }, // toolTip = "Opens the room mods tab."},
-            new ButtonInfo { buttonText = "Movement Mods", method =() => activeCategory = 4, isTogglable = false, },// toolTip = "Opens the movement mods tab."},
-            new ButtonInfo { buttonText = "Visual Mods", method =() => activeCategory = 5, isTogglable = false, },// toolTip = "Opens the safety mods tab."},
+            new ButtonInfo { buttonText = "Room Mods", method =() => activeCategory = 3, isTogglable = false, },
+            new ButtonInfo { buttonText = "Movement Mods", method =() => activeCategory = 4, isTogglable = false, },
+            new ButtonInfo { buttonText = "Visual Mods", method =() => activeCategory = 5, isTogglable = false, },
         },
 
         new ButtonInfo[] { // Settings [1]
@@ -31,7 +31,7 @@ public class ModButtons
             new ButtonInfo { buttonText = "Right Hand", enableMethod =() => rightHanded = true, disableMethod =() => rightHanded = false, toolTip = "Puts the menu on your right hand."},
             //new ButtonInfo { buttonText = "FPS Counter", enableMethod =() => fpsCounter = true, disableMethod =() => fpsCounter = false, enabled = fpsCounter, toolTip = "Toggles the FPS counter."},
             new ButtonInfo { buttonText = "Disconnect Button", enableMethod =() => disconnectButton = true, disableMethod =() => disconnectButton = false, enabled = disconnectButton, toolTip = "Toggles the disconnect button."},
-            new ButtonInfo { buttonText = "ArrayList", enableMethod =() => ArrayListEnabled = true, disableMethod =() => ArrayListEnabled = false, enabled = ArrayListEnabled, toolTip = "Toggles the ArrayList."},
+            new ButtonInfo { buttonText = "ArrayList", enableMethod =() => ArrayListEnabled = true, disableMethod =() => ArrayListEnabled = false, enabled = ArrayListEnabled = true, toolTip = "Toggles the ArrayList."},
         },
 
         new ButtonInfo[] { // Room Mods [3]
@@ -49,8 +49,12 @@ public class ModButtons
             new ButtonInfo { buttonText = "Return to Main", method =() => activeCategory = 0, isTogglable = false},
 
 
-            new ButtonInfo { buttonText = "WASD Fly", method =() => Movement.WASDFly(), isTogglable = true, toolTip = "You can fly around with WASD"},
-            new ButtonInfo { buttonText = "Teleport gun", method =() => Movement.TeleportGun(), isTogglable = true, toolTip = "You can teleport by pressing trigger on ur controller"},
+            new ButtonInfo { buttonText = "Fly", method =() => Movement.Fly(), isTogglable = true, toolTip = "You can fly."},
+            new ButtonInfo { buttonText = "NoClip", method =() => Movement.NoClip(), isTogglable = true, toolTip = "You can go through Objects by holding right trigger."},
+            new ButtonInfo { buttonText = "Bouncy Monke", enableMethod =() => Movement.Bouncy(), disableMethod =() => Movement.ResetBouncy(), isTogglable = true, toolTip = "Makes you a Bouncy monke."},
+            new ButtonInfo { buttonText = "WASD Fly", method =() => Movement.WASDFly(), isTogglable = true, toolTip = "You can fly around with WASD."},
+            new ButtonInfo { buttonText = "Teleport to Stump", method =() => Movement.TPSTUMP(), isTogglable = true, toolTip = "You get teleported to stump."},
+            new ButtonInfo { buttonText = "Teleport gun", method =() => Movement.TeleportGun(), isTogglable = true, toolTip = "You can teleport by pressing trigger on ur controller."},
         },
 
         new ButtonInfo[] { // Safety Mods [5]

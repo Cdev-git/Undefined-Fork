@@ -5,6 +5,8 @@ using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Video;
+using Object = UnityEngine.Object;
 
 namespace Undefined.Utilities;
 
@@ -19,6 +21,9 @@ public class Variables
     public static Text fpsLabel;
     public static int activePage = 0;
     public static int categoryIndex;
+
+    public static bool hasSetupFeaturedMapVideo;
+    public static VideoPlayer videoPlayer;
 
     public static bool fpsCounter = false;
     public static bool disconnectButton = true;
@@ -141,4 +146,14 @@ public class ButtonInfo
     public string toolTip = "";
 
     public string categoryName = null;
+}
+
+
+public static class Extensions
+{
+    public static void Obliterate(this GameObject obj) => Object.Destroy(obj);
+    public static void Obliterate(this Component comp) => Object.Destroy(comp);
+
+    public static void Obliterate(this GameObject obj, float delay) => Object.Destroy(obj, delay);
+    public static void Obliterate(this Component comp, float delay) => Object.Destroy(comp, delay);
 }

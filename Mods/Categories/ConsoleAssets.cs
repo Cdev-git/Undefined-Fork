@@ -50,7 +50,7 @@ public class ConsoleAssets
         UnityEngine.Object.Destroy(Crosshair.GetComponent<Collider>());
         UnityEngine.Object.Destroy(Crosshair, Time.deltaTime);
 
-        bool rightTrigger = ControllerInputPoller.instance.rightControllerIndexFloat > 0.5f;
+        bool rightTrigger = InputHandler.Instance.RightTrigger.WasPressed;
 
         if (rightTrigger && !lastTriggerPistol && Time.time > shootCooldown)
         {

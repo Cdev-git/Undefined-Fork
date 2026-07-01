@@ -17,7 +17,7 @@ public enum InputType
     LeftGrip,
 }
 
-public class InputHandler : MonoBehaviour
+public class InputHandler : Singleton<InputHandler>
 {
     public ControllerJoystick LeftJoystick, RightJoystick;
     public ControllerButton LeftPrimary, LeftSecondary, LeftTrigger, LeftGrip;
