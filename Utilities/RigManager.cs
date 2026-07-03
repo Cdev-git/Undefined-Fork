@@ -1,6 +1,10 @@
-﻿using HarmonyLib;
+﻿using GorillaGameModes;
+using GorillaTagScripts;
+using HarmonyLib;
 using Photon.Pun;
 using Photon.Realtime;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace Undefined.Utilities;
@@ -92,5 +96,84 @@ public class RigManager
             default:
                 return Player.playerColor;
         }
+    }
+}
+
+public static class extarstuff
+{
+    public static NetPlayer GetPlayer(this VRRig rig) =>
+    RigManager.GetPlayerFromVRRig(rig);
+
+    public static List<NetPlayer> InfectedList()
+    {
+        List<NetPlayer> infected = new List<NetPlayer>();
+
+        if (!PhotonNetwork.InRoom || GorillaGameManager.instance == null)
+            return infected;
+
+        switch (GorillaGameManager.instance.GameType())
+        {
+            case GameModeType.Infection:
+            case GameModeType.InfectionCompetitive:
+            case GameModeType.SuperInfect:
+            case GameModeType.FreezeTag:
+            case GameModeType.PropHunt:
+                if (GorillaGameManager.instance is GorillaTagManager tagManager)
+                {
+                    if (tagManager.isCurrentlyTag)
+                    {
+                        if (tagManager.currentIt != null)
+                            infected.Add(tagManager.currentIt);
+                    }
+                    else if (tagManager.currentInfected != null)
+                    {
+                        infected.AddRange(tagManager.currentInfected.Where(element => element != null));
+                    }
+                }
+                break;
+
+            case GameModeType.Ghost:
+            case GameModeType.Ambush:
+                if (GorillaGameManager.instance is GorillaAmbushManager ghostManager)
+                {
+                    if (ghostManager.isCurrentlyTag)
+                    {
+                        if (ghostManager.currentIt != null)
+                            infected.Add(ghostManager.currentIt);
+                    }
+                    else if (ghostManager.currentInfected != null)
+                    {
+                        infected.AddRange(ghostManager.currentInfected.Where(element => element != null));
+                    }
+                }
+                break;
+
+            case GameModeType.Paintbrawl:
+                if (GorillaGameManager.instance is GorillaPaintbrawlManager paintbrawlManager && paintbrawlManager.playerLives != null)
+                {
+                    infected.AddRange(
+                        paintbrawlManager.playerLives
+                            .Where(element => element.Value <= 0)
+                            .Select(element => PhotonNetwork.NetworkingClient.CurrentRoom.GetPlayer(element.Key))
+                            .Where(dummy => dummy != null)
+                            .Select(dummy => (NetPlayer)dummy)
+                    );
+
+                    if (NetworkSystem.Instance?.LocalPlayer != null && !infected.Contains(NetworkSystem.Instance.LocalPlayer))
+                        infected.Add(NetworkSystem.Instance.LocalPlayer);
+                }
+                break;
+        }
+
+        return infected;
+    }
+
+    public static bool IsTagged(this VRRig rig)
+    {
+        if (rig == null) return false;
+        List<NetPlayer> infectedPlayers = InfectedList();
+        NetPlayer targetPlayer = rig.GetPlayer();
+
+        return infectedPlayers.Contains(targetPlayer);
     }
 }

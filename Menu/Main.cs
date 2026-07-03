@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using TMPro;
+using Undefined.Mods.Categories;
 using Undefined.Utilities;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -354,7 +355,21 @@ public class Main : MonoBehaviour
         Text btnText = new GameObject { transform = { parent = menuCanvas.transform } }.AddComponent<Text>();
 
         btnText.font = currentFont;
-        btnText.text = info.overlapText ?? info.buttonText;
+
+        string baseText;
+
+        if (info.isIncremental)
+        {
+            string value = Settings.GetDisplayName(info.GetCurrentIncrementalValue());
+            baseText = $"{info.buttonText} [<color=#00FFFF>{value}</color>]";
+        }
+        else
+        {
+            baseText = info.overlapText ?? info.buttonText;
+        }
+
+        btnText.text = baseText;
+
         btnText.supportRichText = true;
         btnText.fontSize = 1;
         btnText.color = info.enabled ? textColors[1] : textColors[0];
@@ -478,20 +493,27 @@ public class Main : MonoBehaviour
         ButtonInfo target = FindButton(text);
         if (target != null)
         {
-            if (target.isTogglable)
+            if (target.isIncremental)
+            {
+                target.CycleIncrementalValue();
+
+                NotificationLib.SendNotification(
+                    NotificationLib.NotificationType.Info,
+                    $"Changed to: {target.GetCurrentIncrementalValue()}"
+                );
+            }
+            else if (target.isTogglable)
             {
                 target.enabled = !target.enabled;
                 if (target.enabled)
                 {
                     target.enableMethod?.Invoke();
-
                     NotificationLib.SendNotification(
                         NotificationLib.NotificationType.Enabled, target.toolTip);
                 }
                 else
                 {
                     target.disableMethod?.Invoke();
-
                     NotificationLib.SendNotification(
                         NotificationLib.NotificationType.Disabled,
                         target.toolTip);

@@ -1,4 +1,5 @@
-﻿using Undefined.Utilities;
+﻿using System.Collections.Generic;
+using Undefined.Utilities;
 using UnityEngine;
 
 namespace Undefined.MENUSETTINGS;
@@ -44,6 +45,23 @@ public class Settings
 
     public static int fontIndex = 2;
 
+    public static List<string> fontOptions = new List<string>
+    {
+        "Arial",
+        "Comic Sans",
+        "Minecraft"
+    };
+
+    public static void SetFont(string fontName)
+    {
+        fontIndex = fontName switch
+        {
+            "Arial" => 0,
+            "Comic Sans" => 1,
+            "Minecraft" => 2,
+            _ => 0
+        };
+    }
 
     public static Font currentFont
     {

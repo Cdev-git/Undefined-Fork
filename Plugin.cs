@@ -5,6 +5,7 @@ using Newtonsoft.Json.Linq;
 using System;
 using System.Collections;
 using Undefined.Menu;
+using Undefined.Mods.Categories;
 using Undefined.Utilities;
 using UnityEngine;
 using UnityEngine.Networking;
@@ -50,6 +51,7 @@ public class Plugin : BaseUnityPlugin
 
         ComponentHolder.AddComponent<Main>();
         ComponentHolder.AddComponent<NotificationLib>();
+        ComponentHolder.AddComponent<SaveHandler>();
 
         StartCoroutine(StartVersionCheck());
     }

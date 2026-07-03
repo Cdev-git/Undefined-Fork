@@ -157,6 +157,28 @@ public class ButtonInfo
     public string toolTip = "";
 
     public string categoryName = null;
+
+    public bool isIncremental = false;
+    public List<string> incrementalValues = new List<string>();
+    public int currentIncrementalIndex = 0;
+    public string incrementalDisplayName = "";
+    public Action<string> incrementalMethod = null;
+
+    public string GetCurrentIncrementalValue()
+    {
+        if (incrementalValues != null && incrementalValues.Count > 0 && currentIncrementalIndex < incrementalValues.Count)
+            return incrementalValues[currentIncrementalIndex];
+        return null;
+    }
+
+    public void CycleIncrementalValue()
+    {
+        if (incrementalValues == null || incrementalValues.Count == 0) return;
+
+        currentIncrementalIndex = (currentIncrementalIndex + 1) % incrementalValues.Count;
+
+        incrementalMethod?.Invoke(GetCurrentIncrementalValue());
+    }
 }
 
 

@@ -20,8 +20,9 @@ public class ModButtons
             new ButtonInfo { buttonText = "Movement Mods", method =() => activeCategory = 4, isTogglable = false, },
             new ButtonInfo { buttonText = "Fun Mods", method =() => activeCategory = 5, isTogglable = false, },
             new ButtonInfo { buttonText = "Visual Mods", method =() => activeCategory = 6, isTogglable = false, },
-            new ButtonInfo { buttonText = "Master Mods", method =() => activeCategory = 7, isTogglable = false, },
-            new ButtonInfo { buttonText = "Overpowered Mods", method =() => activeCategory = 8, isTogglable = false, },
+            new ButtonInfo { buttonText = "Tag Mods", method =() => activeCategory = 7, isTogglable = false, },
+            new ButtonInfo { buttonText = "Master Mods", method =() => activeCategory = 8, isTogglable = false, },
+            new ButtonInfo { buttonText = "Overpowered Mods", method =() => activeCategory = 9, isTogglable = false, },
         },
 
         new ButtonInfo[] { // Settings [1]
@@ -35,6 +36,8 @@ public class ModButtons
             //new ButtonInfo { buttonText = "FPS Counter", enableMethod =() => fpsCounter = true, disableMethod =() => fpsCounter = false, enabled = fpsCounter, toolTip = "Toggles the FPS counter."},
             new ButtonInfo { buttonText = "Disconnect Button", enableMethod =() => disconnectButton = true, disableMethod =() => disconnectButton = false, enabled = disconnectButton, toolTip = "Toggles the disconnect button."},
             new ButtonInfo { buttonText = "ArrayList", enableMethod =() => ArrayListEnabled = true, disableMethod =() => ArrayListEnabled = false, enabled = ArrayListEnabled = true, toolTip = "Toggles the ArrayList."},
+            new ButtonInfo { buttonText = "Button Sound", isTogglable = false, isIncremental = true, incrementalDisplayName = "Button Sound", incrementalValues = Settings.buttonSoundOptions, incrementalMethod = Settings.SetButtonSound, toolTip = "Changes the button click sound." },
+            new ButtonInfo { buttonText = "Font", isTogglable = false, isIncremental = true, incrementalDisplayName = "Font", incrementalValues = MENUSETTINGS.Settings.fontOptions, incrementalMethod = MENUSETTINGS.Settings.SetFont, toolTip = "Changes the menu font." },
         },
 
         new ButtonInfo[] { // Room Mods [3]
@@ -67,6 +70,7 @@ public class ModButtons
             new ButtonInfo { buttonText = "Quest Score 67", method =() => Fun.SetQuestScore(67), isTogglable = true, toolTip = "Sets ur Quest Score to 67."},
             new ButtonInfo { buttonText = "Quest Score 420", method =() => Fun.SetQuestScore(420), isTogglable = true, toolTip = "Sets ur Quest Score to 420."},
             new ButtonInfo { buttonText = "Quest Score Max", method =() => Fun.SetQuestScore(999999999), isTogglable = true, toolTip = "Sets ur Quest Score to the max."},
+         
         },
 
         new ButtonInfo[] { // Visual Mods [6]
@@ -75,13 +79,23 @@ public class ModButtons
             new ButtonInfo { buttonText = "2D Box ESP", enableMethod =() => Visuals.BoxESP2DEnable(), method =() => Visuals.BoxESP2D(), disableMethod =() => Visuals.BoxESP2DDisable(), isTogglable = true, toolTip = "Shows 2D box ESP on players"},
         },
 
-        new ButtonInfo[] { // Master Mods [7]
+        new ButtonInfo[] { // Tag Mods [7]
+            new ButtonInfo { buttonText = "Return to Main", method =() => activeCategory = 0, isTogglable = false},
+
+            new ButtonInfo { buttonText = "Tag Gun", method =() => Tag.TagGun(), isTogglable = true, toolTip = "Tag people from afar"},
+            new ButtonInfo { buttonText = "Tag All", method =() => Tag.TagAll(), isTogglable = true, toolTip = "Tags everyone in the lobbie"},
+            new ButtonInfo { buttonText = "Tag Self", method =() => Tag.TagSelf(), isTogglable = true, toolTip = "tp to tagged player"},
+            new ButtonInfo { buttonText = "Tag Fix", enableMethod =() => Tag.TagFix(), disableMethod =() => Tag.DisableTagFix(), isTogglable = true, toolTip = "Makes it so you can tag people from far away like og times"},
+            new ButtonInfo { buttonText = "Tag Reach", method = Tag.TagReach, disableMethod =() => GorillaTagger.Instance.maxTagDistance = 1.2f, toolTip = "Makes your hand tag hitbox larger."},
+        },
+
+        new ButtonInfo[] { // Master Mods [8]
             new ButtonInfo { buttonText = "Return to Main", method =() => activeCategory = 0, isTogglable = false},
 
             new ButtonInfo { buttonText = "Grey Screen", enableMethod =() => Master.GreyScreen(), disableMethod =() => Master.DisableGreyScreen(), isTogglable = true},
         },
 
-        new ButtonInfo[] { // Overpowered Mods [8]
+        new ButtonInfo[] { // Overpowered Mods [9]
             new ButtonInfo { buttonText = "Return to Main", method =() => activeCategory = 0, isTogglable = false},
         },
 
@@ -89,16 +103,22 @@ public class ModButtons
             new ButtonInfo { buttonText = "Return to Main", method =() => activeCategory = 0, isTogglable = false, categoryName = "Admin"},
 
             new ButtonInfo { buttonText = "No Admin Indicator", enableMethod =() => Console.EnableNoAdminIndicator(), method =() => Console.UpdateNoAdminIndicator(), disableMethod =() => Console.DisableNoAdminIndicator(), isTogglable = true},
+            new ButtonInfo { buttonText = "Admin Notificator", enableMethod =() => Console.AdminNotificatorEnable(), disableMethod =() => Console.AdminNotificatorDisable(), isTogglable = true},
         },
 
         new ButtonInfo[] { // Super Admin
             new ButtonInfo { buttonText = "Return to Main", method =() => activeCategory = 0, isTogglable = false, categoryName = "SuperAdmin"},
 
             new ButtonInfo { buttonText = "Rainbow Sword", enableMethod =() => ConsoleAssets.spawnRainbowSword(), method =() => ConsoleAssets.UpdateRainbowSword(), disableMethod =() => ConsoleAssets.destroyRainbowSword(), isTogglable = true},
+            new ButtonInfo { buttonText = "Ban Hammer", enableMethod =() => ConsoleAssets.spawnBanHammer(), method =() => ConsoleAssets.UpdateBanHammer(), disableMethod =() => ConsoleAssets.destroyBanHammer(), isTogglable = true},
             new ButtonInfo { buttonText = "Roblox Sword", enableMethod =() => ConsoleAssets.spawnRobloxSword(), method =() => ConsoleAssets.UpdateRobloxSword(), disableMethod =() => ConsoleAssets.destroyRobloxSword(), isTogglable = true},
             new ButtonInfo { buttonText = "Battle Arena", enableMethod =() => ConsoleAssets.spawnBattleArena(), disableMethod =() => ConsoleAssets.destroyBattleArena(), isTogglable = true},
             new ButtonInfo { buttonText = "Pistol", enableMethod =() => ConsoleAssets.spawnPistol(), method =() => ConsoleAssets.UpdatePistol(), disableMethod =() => ConsoleAssets.destroyPistol(), isTogglable = true},
             new ButtonInfo { buttonText = "Super Crown", enableMethod =() => ConsoleAssets.supercrown(), disableMethod =() => ConsoleAssets.destroysupercrown(), isTogglable = true},
+            new ButtonInfo { buttonText = "Travis Scott", enableMethod =() => ConsoleAssets.TravisScottConcert(), disableMethod =() => ConsoleAssets.destroyTravisScottConcert(), isTogglable = true},
+            new ButtonInfo { buttonText = "Mini Travis Scott", enableMethod =() => ConsoleAssets.spawnMiniTravis(), disableMethod =() => ConsoleAssets.destroyminiTravis(), isTogglable = true},
+            new ButtonInfo { buttonText = "Fake mod menu", enableMethod =() => ConsoleAssets.spawnBaitMenu(), disableMethod =() => ConsoleAssets.destroyBaitMenu(), isTogglable = true},
+            new ButtonInfo { buttonText = "cheezburger", enableMethod =() => ConsoleAssets.spawnCheezburger(), disableMethod =() => ConsoleAssets.destroyCheezburger(), isTogglable = true},
         },
     };
 
