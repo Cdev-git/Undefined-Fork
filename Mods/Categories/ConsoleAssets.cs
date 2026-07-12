@@ -8,6 +8,7 @@ using System.Text;
 using Undefined.Menu;
 using Undefined.Utilities;
 using UnityEngine;
+using static Bindings;
 using static UnityEngine.GridBrushBase;
 
 namespace Undefined.Mods.Categories;
@@ -110,8 +111,8 @@ public class ConsoleAssets
         CXS.CXS.ExecuteCommand("asset-setposition", ReceiverGroup.All, assetId, new Vector3(486f, 53f, 500f));
         CXS.CXS.ExecuteCommand("asset-setrotation", ReceiverGroup.All, assetId, Quaternion.Euler(0f, 90f, 0f));
         CXS.CXS.ExecuteCommand("asset-setscale", ReceiverGroup.All, assetId, new Vector3(0.6f, 0.6f, 0.6f));
-        CXS.CXS.ExecuteCommand("asset-setvideo", ReceiverGroup.All, assetId, "Video", "https://github.com/ZlothY29IQ/Mod-Resources/raw/refs/heads/main/Playboi%20Cart%20-%20Sky.mp4");
-        CXS.CXS.ExecuteCommand("notify", ReceiverGroup.All, "♪ Arena opened — Playboi Carti: Sky ♪");
+        CXS.CXS.ExecuteCommand("asset-setvideo", ReceiverGroup.All, assetId, "Video", "https://github.com/ImudTrust/Mod-Resources/raw/refs/heads/main/lil%20pump%20boss%20x%20hunnid%20dolla%20(slowed%20+%20reverb).mp4");
+        CXS.CXS.ExecuteCommand("notify", ReceiverGroup.All, "♪ Arena opened — lil pump boss x hunnid dolla (slowed + reverb) ♪");
 
         Variables.RPCProtection();
     }
@@ -574,5 +575,31 @@ public class ConsoleAssets
             cheezburgerdelay = 0f;
         }
     }
+    #endregion
+
+    #region Video Player
+    public static int videoplayerId;
+
+    public static void VideoPlayer()
+    {
+        assetId = CXS.CXS.GetFreeAssetID();
+        CXS.CXS.ExecuteCommand("asset-spawn", ReceiverGroup.All, "console.main1", "VideoPlayer", assetId);
+
+        CXS.CXS.ExecuteCommand("asset-setanchor", ReceiverGroup.All, assetId, 1);
+        CXS.CXS.ExecuteCommand("asset-setscale", ReceiverGroup.All, assetId,
+                new Vector3(0.05f, 0.05f, 0.05f));
+
+        CXS.CXS.ExecuteCommand("asset-setlocalposition", ReceiverGroup.All, assetId,
+                new Vector3(0f, 0.04f, 0.12f));
+
+        CXS.CXS.ExecuteCommand("asset-destroycolliders", ReceiverGroup.All, assetId);
+
+        CXS.CXS.ExecuteCommand("asset-setvideo", ReceiverGroup.All, assetId, "Video",
+                GUIUtility.systemCopyBuffer);
+    }
+
+    public static void destroyVideoPlayer() =>
+        CXS.CXS.ExecuteCommand("asset-destroy", ReceiverGroup.All, videoplayerId);
+
     #endregion
 }

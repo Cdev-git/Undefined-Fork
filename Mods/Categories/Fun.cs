@@ -4,6 +4,8 @@ using Photon.Realtime;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Undefined.Utilities;
+using UnityEngine;
 
 namespace Undefined.Mods.Categories;
 
@@ -42,5 +44,27 @@ public class Fun
     public static void SetQuestScore(int score)
     {
         VRRig.LocalRig.SetQuestScore(score);
+    }
+
+    public static void Get_Bracelet(bool Enable, bool isleft)
+    {
+        if (Enable)
+        {
+            GorillaTagger.Instance.myVRRig.SendRPC("EnableNonCosmeticHandItemRPC", RpcTarget.All, true, isleft);
+            Variables.RPCProtection();
+        }
+        else
+        {
+            GorillaTagger.Instance.myVRRig.SendRPC("EnableNonCosmeticHandItemRPC", RpcTarget.All, false, isleft);
+        }
+    }
+
+    public static void RGBMonke()
+    {
+        float time = Time.time * 1.8f;
+        var R = Mathf.Sin(time) * 0.5f + 0.5f;
+        var G = Mathf.Sin(time + 2f * Mathf.PI / 3f) * 0.5f + 0.5f;
+        var B = Mathf.Sin(time + 4f * Mathf.PI / 3f) * 0.5f + 0.5f;
+        GorillaTagger.Instance.myVRRig.SendRPC("RPC_InitializeNoobMaterial", RpcTarget.All, new object[] { R, G, B });
     }
 }

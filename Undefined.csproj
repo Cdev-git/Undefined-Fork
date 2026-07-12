@@ -12,10 +12,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Resources\Embedded\icon.png" />
     <None Remove="Resources\Embedded\minecraftfont" />
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Include="Resources\Embedded\icon.png" />
     <EmbeddedResource Include="Resources\Embedded\minecraftfont" />
   </ItemGroup>
 

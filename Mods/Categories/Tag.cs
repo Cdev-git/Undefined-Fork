@@ -18,7 +18,7 @@ public class Tag
             rig.transform.position = GunLib.LockedRigOrPlayerOrwhatever.transform.position + new Vector3(0f, -2f, 0f);
             GameMode.ReportTag(GunLib.LockedRigOrPlayerOrwhatever.Creator);
         }, true);
-        rig.enabled = true;
+        rig.enabled = false;
     }
 
     public static void TagAll()
@@ -59,7 +59,7 @@ public class Tag
         }
     }
 
-    private static float tagReachDistance = 1f;
+    private static float tagReachDistance = 0.8f;
 
     public static void TagReach()
     {

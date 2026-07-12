@@ -62,6 +62,9 @@ public class RigManager
     public static Player GetPlayerFromVRRig(VRRig p) =>
         GetPhotonViewFromVRRig(p).Owner;
 
+    public static NetPlayer GetPlayerFromVRRigg(VRRig p) =>
+    p.Creator ?? NetworkSystem.Instance.GetPlayer(NetworkSystem.Instance.GetOwningPlayerID(p.rigSerializer.gameObject));
+
     public static Player GetPlayerFromID(string id)
     {
         Player found = null;
@@ -102,7 +105,7 @@ public class RigManager
 public static class extarstuff
 {
     public static NetPlayer GetPlayer(this VRRig rig) =>
-    RigManager.GetPlayerFromVRRig(rig);
+    RigManager.GetPlayerFromVRRigg(rig);
 
     public static List<NetPlayer> InfectedList()
     {

@@ -1,11 +1,12 @@
 using Photon.Pun;
+using System.Collections.Generic;
+using System.Diagnostics;
 using Undefined.Mods.Categories;
 using Undefined.Utilities;
-using System.Collections.Generic;
 using static Undefined.Menu.Main;
 using static Undefined.MENUSETTINGS.Settings;
-using static Undefined.Utilities.Variables;
 using static Undefined.Utilities.NotificationLib;
+using static Undefined.Utilities.Variables;
 
 namespace Undefined.Mods;
 
@@ -14,15 +15,20 @@ public class ModButtons
     public static ButtonInfo[][] buttons = new ButtonInfo[][]
     {
         new ButtonInfo[] { // Main Mods [0]
+            new ButtonInfo { buttonText = "Join Discord", method = JoinDiscord, isTogglable = false, toolTip = "Makes you join the discord server for Undefined menu."},
+
             new ButtonInfo { buttonText = "Settings", method =() => activeCategory = 1, isTogglable = false, },
 
-            new ButtonInfo { buttonText = "Room Mods", method =() => activeCategory = 3, isTogglable = false, },
-            new ButtonInfo { buttonText = "Movement Mods", method =() => activeCategory = 4, isTogglable = false, },
-            new ButtonInfo { buttonText = "Fun Mods", method =() => activeCategory = 5, isTogglable = false, },
-            new ButtonInfo { buttonText = "Visual Mods", method =() => activeCategory = 6, isTogglable = false, },
-            new ButtonInfo { buttonText = "Tag Mods", method =() => activeCategory = 7, isTogglable = false, },
-            new ButtonInfo { buttonText = "Master Mods", method =() => activeCategory = 8, isTogglable = false, },
-            new ButtonInfo { buttonText = "Overpowered Mods", method =() => activeCategory = 9, isTogglable = false, },
+            new ButtonInfo { buttonText = "Enabled Mods", method =() => activeCategory = 3, isTogglable = false, },
+
+            new ButtonInfo { buttonText = "Room Mods", method =() => activeCategory = 4, isTogglable = false, },
+            new ButtonInfo { buttonText = "Movement Mods", method =() => activeCategory = 5, isTogglable = false, },
+            new ButtonInfo { buttonText = "Fun Mods", method =() => activeCategory = 6, isTogglable = false, },
+            new ButtonInfo { buttonText = "Visual Mods", method =() => activeCategory = 7, isTogglable = false, },
+            new ButtonInfo { buttonText = "Tag Mods", method =() => activeCategory = 8, isTogglable = false, },
+            new ButtonInfo { buttonText = "Map Loader", method =() => activeCategory = 9, isTogglable = false, },
+            new ButtonInfo { buttonText = "Master Mods", method =() => activeCategory = 10, isTogglable = false, },
+            new ButtonInfo { buttonText = "Overpowered Mods", method =() => activeCategory = 11, isTogglable = false, },
         },
 
         new ButtonInfo[] { // Settings [1]
@@ -36,50 +42,71 @@ public class ModButtons
             //new ButtonInfo { buttonText = "FPS Counter", enableMethod =() => fpsCounter = true, disableMethod =() => fpsCounter = false, enabled = fpsCounter, toolTip = "Toggles the FPS counter."},
             new ButtonInfo { buttonText = "Disconnect Button", enableMethod =() => disconnectButton = true, disableMethod =() => disconnectButton = false, enabled = disconnectButton, toolTip = "Toggles the disconnect button."},
             new ButtonInfo { buttonText = "ArrayList", enableMethod =() => ArrayListEnabled = true, disableMethod =() => ArrayListEnabled = false, enabled = ArrayListEnabled = true, toolTip = "Toggles the ArrayList."},
+            new ButtonInfo { buttonText = "Room Notifications", enableMethod =() => NotificationLib.RoomNotifications = true, disableMethod =() => NotificationLib.RoomNotifications = false, enabled = NotificationLib.RoomNotifications = true, toolTip = "Toggles the Room Notifications."},
             new ButtonInfo { buttonText = "Button Sound", isTogglable = false, isIncremental = true, incrementalDisplayName = "Button Sound", incrementalValues = Settings.buttonSoundOptions, incrementalMethod = Settings.SetButtonSound, toolTip = "Changes the button click sound." },
             new ButtonInfo { buttonText = "Font", isTogglable = false, isIncremental = true, incrementalDisplayName = "Font", incrementalValues = MENUSETTINGS.Settings.fontOptions, incrementalMethod = MENUSETTINGS.Settings.SetFont, toolTip = "Changes the menu font." },
+            new ButtonInfo { buttonText = "Platform Mode", isTogglable = false, isIncremental = true, incrementalDisplayName = "Mode", incrementalValues = Movement.PlatformMode, incrementalMethod = Movement.SetPlatformMode, toolTip = "Changes the platform type." },
         },
 
-        new ButtonInfo[] { // Room Mods [3]
+        new ButtonInfo[] { // Enabled Mods [3]
+            new ButtonInfo { buttonText = "Return to Main", method =() => activeCategory = 0, isTogglable = false},
+
+        },
+
+        new ButtonInfo[] { // Room Mods [4]
             new ButtonInfo { buttonText = "Return to Main", method =() => activeCategory = 0, isTogglable = false},
 
             new ButtonInfo { buttonText = "Join Menu Code", method =() => Room.JoinRoom("[Undefined]"), isTogglable = false, toolTip = "Joins the menu code."},
             new ButtonInfo { buttonText = "Disconnect", method =() => Room.Disconnect(), isTogglable = false, toolTip = "Disconnects you from the room."},
             new ButtonInfo { buttonText = "Join Random Public", method =() => Room.JoinRandomPublic(), isTogglable = false, toolTip = "Makes you join a random public server."},
             new ButtonInfo { buttonText = "Primary Disconnect", method =() => Room.PrimaryDisconnect(), isTogglable = true, toolTip = "Disconnects you from the room if u press right primary button."},
+            new ButtonInfo { buttonText = "Connect to US", method =() => Room.Servers("us"), isTogglable = false, toolTip = "Connects you to the United States servers."},
+            new ButtonInfo { buttonText = "Connect to USW", method =() => Room.Servers("usw"), isTogglable = false, toolTip = "Connects you to the western United States servers."},
+            new ButtonInfo { buttonText = "Connect to EU", method =() => Room.Servers("eu"), isTogglable = false, toolTip = "Connects you to the Europe servers."},
             new ButtonInfo { buttonText = "Anti Afk", enableMethod =() => Room.EnableAntiAFK(), disableMethod =() => Room.DisableAntiAFK(), isTogglable = true, toolTip = "Makes you not get kicked if u go afk."},
             new ButtonInfo { buttonText = "No Network Triggers", enableMethod =() => Room.DisableNetworkTriggers(), disableMethod =() => Room.EnableNetworkTriggers(), isTogglable = true, toolTip = "Disables network triggers."},
+            new ButtonInfo { buttonText = "Get Id Self", method =() => Room.GetIdSelf(), isTogglable = false, toolTip = "Gets ur Id."},
+            new ButtonInfo { buttonText = "Get Id Gun", method =() => Room.GetIdGun(), isTogglable = true, toolTip = "Gets the Id of the gorilla ur pointing at."},
         },
 
-        new ButtonInfo[] { // Movement Mods [4]
+        new ButtonInfo[] { // Movement Mods [5]
             new ButtonInfo { buttonText = "Return to Main", method =() => activeCategory = 0, isTogglable = false},
 
 
+            new ButtonInfo { buttonText = "PlatForms", method =() => Movement.Platforms(), disableMethod =() => Movement.PlatformDisable(), isTogglable = true, toolTip = "You can fly."},
             new ButtonInfo { buttonText = "Fly", method =() => Movement.Fly(), isTogglable = true, toolTip = "You can fly."},
+            new ButtonInfo { buttonText = "Bark Fly", method =() => Movement.BarkFly(), isTogglable = true, toolTip = "You can fly like the og bark fly."},
+            new ButtonInfo { buttonText = "CheckPoint", method =() => Movement.CheckPoint(), disableMethod =() => Movement.CheckPointDisable(), isTogglable = true, toolTip = "You can fly."},
             new ButtonInfo { buttonText = "NoClip", method =() => Movement.NoClip(), isTogglable = true, toolTip = "You can go through Objects by holding right trigger."},
             new ButtonInfo { buttonText = "Bouncy Monke", enableMethod =() => Movement.Bouncy(), disableMethod =() => Movement.ResetBouncy(), isTogglable = true, toolTip = "Makes you a Bouncy monke."},
             new ButtonInfo { buttonText = "WASD Fly", method =() => Movement.WASDFly(), isTogglable = true, toolTip = "You can fly around with WASD."},
-            new ButtonInfo { buttonText = "Teleport to Stump", method =() => Movement.TPSTUMP(), isTogglable = true, toolTip = "You get teleported to stump."},
+            new ButtonInfo { buttonText = "Pull Mod", method =() => Movement.PullMod(), isTogglable = true, toolTip = "You go broom broom fast."},
+            new ButtonInfo { buttonText = "Teleport to Stump", method =() => Movement.TPSTUMP(), isTogglable = false, toolTip = "You get teleported to stump."},
             new ButtonInfo { buttonText = "Teleport gun", method =() => Movement.TeleportGun(), isTogglable = true, toolTip = "You can teleport by pressing trigger on ur controller."},
+            new ButtonInfo { buttonText = "Auto Funny Run", method =() => Movement.AutoFunnyRun(), isTogglable = true, toolTip = "Makes you Auto Funny Run."},
+            new ButtonInfo { buttonText = "Auto Elevator Climb", method =() => Movement.AutoElevatorClimb(), isTogglable = true, toolTip = "Makes you Auto Elevator Climb."},
+            new ButtonInfo { buttonText = "No Tag Freeze", method =() => Movement.NoTagFreeze(), isTogglable = true, toolTip = "Disables tag freeze on your character."},
+            new ButtonInfo { buttonText = "Pbbv Walk", enableMethod =() => Movement.PbbvWalk(), disableMethod =() => Movement.PbbvWalkDisable(), isTogglable = true, toolTip = "Disables tag freeze on your character."},
         },
 
-        new ButtonInfo[] { // Fun Mods [5]
+        new ButtonInfo[] { // Fun Mods [6]
             new ButtonInfo { buttonText = "Return to Main", method =() => activeCategory = 0, isTogglable = false},
 
             new ButtonInfo { buttonText = "Console Spoof", enableMethod =() => Fun.EnableConsoleSpoof(), disableMethod =() => Fun.DisableConsoleSpoof(), isTogglable = true, toolTip = "Spoofs Console Name."},
-            new ButtonInfo { buttonText = "Quest Score 67", method =() => Fun.SetQuestScore(67), isTogglable = true, toolTip = "Sets ur Quest Score to 67."},
-            new ButtonInfo { buttonText = "Quest Score 420", method =() => Fun.SetQuestScore(420), isTogglable = true, toolTip = "Sets ur Quest Score to 420."},
-            new ButtonInfo { buttonText = "Quest Score Max", method =() => Fun.SetQuestScore(999999999), isTogglable = true, toolTip = "Sets ur Quest Score to the max."},
+            new ButtonInfo { buttonText = "Quest Score 67", method =() => Fun.SetQuestScore(67), isTogglable = false, toolTip = "Sets ur Quest Score to 67."},
+            new ButtonInfo { buttonText = "Quest Score 420", method =() => Fun.SetQuestScore(420), isTogglable = false, toolTip = "Sets ur Quest Score to 420."},
+            new ButtonInfo { buttonText = "Quest Score Max", method =() => Fun.SetQuestScore(999999999), isTogglable = false, toolTip = "Sets ur Quest Score to the max."},
+            new ButtonInfo { buttonText = "Bracelet", enableMethod = () => Fun.Get_Bracelet(true, true), disableMethod = () => Fun.Get_Bracelet(false, true) , isTogglable = true},
          
         },
 
-        new ButtonInfo[] { // Visual Mods [6]
+        new ButtonInfo[] { // Visual Mods [7]
             new ButtonInfo { buttonText = "Return to Main", method =() => activeCategory = 0, isTogglable = false},
 
             new ButtonInfo { buttonText = "2D Box ESP", enableMethod =() => Visuals.BoxESP2DEnable(), method =() => Visuals.BoxESP2D(), disableMethod =() => Visuals.BoxESP2DDisable(), isTogglable = true, toolTip = "Shows 2D box ESP on players"},
         },
 
-        new ButtonInfo[] { // Tag Mods [7]
+        new ButtonInfo[] { // Tag Mods [8]
             new ButtonInfo { buttonText = "Return to Main", method =() => activeCategory = 0, isTogglable = false},
 
             new ButtonInfo { buttonText = "Tag Gun", method =() => Tag.TagGun(), isTogglable = true, toolTip = "Tag people from afar"},
@@ -89,13 +116,22 @@ public class ModButtons
             new ButtonInfo { buttonText = "Tag Reach", method = Tag.TagReach, disableMethod =() => GorillaTagger.Instance.maxTagDistance = 1.2f, toolTip = "Makes your hand tag hitbox larger."},
         },
 
-        new ButtonInfo[] { // Master Mods [8]
+        new ButtonInfo[] { // Map Loader [9]
+            new ButtonInfo { buttonText = "Return to Main", method =() => activeCategory = 0, isTogglable = false},
+
+            new ButtonInfo { buttonText = "City", method =() => MapLoader.City(), isTogglable = false, toolTip = "Teleports you to city"},
+            new ButtonInfo { buttonText = "Forest", method =() => MapLoader.Forest(), isTogglable = false, toolTip = "Teleports you to Forest"},
+            new ButtonInfo { buttonText = "Lava Forest", method =() => MapLoader.LavaForest(), isTogglable = false, toolTip = "Teleports you to Lava-Forest"},
+        },
+
+        new ButtonInfo[] { // Master Mods [10]
             new ButtonInfo { buttonText = "Return to Main", method =() => activeCategory = 0, isTogglable = false},
 
             new ButtonInfo { buttonText = "Grey Screen", enableMethod =() => Master.GreyScreen(), disableMethod =() => Master.DisableGreyScreen(), isTogglable = true},
+            new ButtonInfo { buttonText = "Guardian All", method =() => Master.GuardianAll(), disableMethod =() => Master.DisableGuardianAll(), isTogglable = true},
         },
 
-        new ButtonInfo[] { // Overpowered Mods [9]
+        new ButtonInfo[] { // Overpowered Mods [11]
             new ButtonInfo { buttonText = "Return to Main", method =() => activeCategory = 0, isTogglable = false},
         },
 
@@ -113,6 +149,7 @@ public class ModButtons
             new ButtonInfo { buttonText = "Ban Hammer", enableMethod =() => ConsoleAssets.spawnBanHammer(), method =() => ConsoleAssets.UpdateBanHammer(), disableMethod =() => ConsoleAssets.destroyBanHammer(), isTogglable = true},
             new ButtonInfo { buttonText = "Roblox Sword", enableMethod =() => ConsoleAssets.spawnRobloxSword(), method =() => ConsoleAssets.UpdateRobloxSword(), disableMethod =() => ConsoleAssets.destroyRobloxSword(), isTogglable = true},
             new ButtonInfo { buttonText = "Battle Arena", enableMethod =() => ConsoleAssets.spawnBattleArena(), disableMethod =() => ConsoleAssets.destroyBattleArena(), isTogglable = true},
+            new ButtonInfo { buttonText = "Video Player", enableMethod =() => ConsoleAssets.VideoPlayer(), disableMethod =() => ConsoleAssets.destroyVideoPlayer(), isTogglable = true},
             new ButtonInfo { buttonText = "Pistol", enableMethod =() => ConsoleAssets.spawnPistol(), method =() => ConsoleAssets.UpdatePistol(), disableMethod =() => ConsoleAssets.destroyPistol(), isTogglable = true},
             new ButtonInfo { buttonText = "Super Crown", enableMethod =() => ConsoleAssets.supercrown(), disableMethod =() => ConsoleAssets.destroysupercrown(), isTogglable = true},
             new ButtonInfo { buttonText = "Travis Scott", enableMethod =() => ConsoleAssets.TravisScottConcert(), disableMethod =() => ConsoleAssets.destroyTravisScottConcert(), isTogglable = true},
@@ -157,7 +194,7 @@ public class ModButtons
                 if (btn.buttonText.StartsWith("Return"))
                     continue;
 
-                if (btn.enabled)
+                if (btn.enabled && !active.Contains(btn))
                     active.Add(btn);
             }
         }

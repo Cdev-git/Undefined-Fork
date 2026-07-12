@@ -29,9 +29,24 @@ public class Room
             PhotonNetwork.Disconnect();
         }
     }
+
     public static void Servers(string svr)
     {
-        PhotonNetwork.ConnectToRegion(svr);
+        string currentsvr = PhotonNetwork.CloudRegion;
+        if (!string.IsNullOrEmpty(currentsvr))
+            currentsvr = currentsvr.Replace("/*", "");
+
+        if (currentsvr != svr)
+            PhotonNetwork.ConnectToRegion(svr);
+
+        NetworkSystem.Instance.currentRegionIndex = Array.IndexOf(NetworkSystem.Instance.regionNames, svr);
+
+        NetworkSystemPUN punNetwork = (NetworkSystemPUN)NetworkSystem.Instance;
+        for (int i = 0; i < punNetwork.regionData.Length; i++)
+        {
+            NetworkRegionInfo regionInfo = punNetwork.regionData[i];
+            regionInfo.pingToRegion = Array.IndexOf(NetworkSystem.Instance.regionNames, regionInfo) == i ? 0 : 9999;
+        }
     }
 
     public static void JoinRoom(string RoomCode)
@@ -56,5 +71,36 @@ public class Room
     public static void EnableNetworkTriggers()
     {
         GameObject.Find("Environment Objects/TriggerZones_Prefab/JoinRoomTriggers_Prefab").SetActive(true);
+    }
+
+    public static void GetIdSelf()
+    {
+        string id = PhotonNetwork.LocalPlayer.UserId;
+
+        NotificationLib.SendNotification(
+            NotificationLib.NotificationType.Info,
+            $"Copied ID: {id}"
+        );
+
+        GUIUtility.systemCopyBuffer = id;
+    }
+
+    public static void GetIdGun()
+    {
+        GunLib.start2guns(() =>
+        {
+            var targetedPlayer = GunLib.LockedRigOrPlayerOrwhatever;
+
+            if (targetedPlayer != null)
+            {
+                string id = targetedPlayer.Creator.UserId;
+                GUIUtility.systemCopyBuffer = id;
+
+                NotificationLib.SendNotification(
+                    NotificationLib.NotificationType.Info,
+                    $"Copied ID: {id}"
+                );
+            }
+        }, false);
     }
 }

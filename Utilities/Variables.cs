@@ -2,16 +2,24 @@
 using Photon.Pun;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
+using System.Reflection;
 using System.Text;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Video;
+using Debug = UnityEngine.Debug;
 using Object = UnityEngine.Object;
 
 namespace Undefined.Utilities;
 
 public class Variables
 {
+    public static string serverLink = "https://discord.gg/Bq94vsUtGk";
+
+    public static Texture2D backgroundTexture;
+
     public static GameObject activeMenu;
     public static GameObject bgObject;
     public static GameObject handPointer;
@@ -45,6 +53,8 @@ public class Variables
     public static float gradientSpeed = 0.5f;
 
     private static int? noInvisLayerMask;
+
+    public static GTPlayer playerInstance;
     public static int NoInvisLayerMask()
     {
         noInvisLayerMask ??= ~(
@@ -58,6 +68,18 @@ public class Variables
 
         return noInvisLayerMask ?? GTPlayer.Instance.locomotionEnabledLayers;
     }
+
+    public static void JoinDiscord() =>
+           Process.Start(serverLink);
+
+    public static void TeleportPlayer(Vector3 destination)
+    {
+        GTPlayer.Instance.TeleportTo(FormatTeleportPosition(destination), GTPlayer.Instance.transform.rotation);
+        VRRig.LocalRig.transform.position = destination;
+    }
+
+    public static Vector3 FormatTeleportPosition(Vector3 pos) =>
+        pos - GorillaTagger.Instance.bodyCollider.transform.position + GorillaTagger.Instance.transform.position;
 
     public static Vector3 RandomVector3(float range = 1f)
     {
@@ -142,6 +164,51 @@ public class Variables
     internal bool isShooting;
     internal bool isTriggered;
     internal bool isLocked;
+
+    public static void LoadEmbeddedBackground(string resourceName)
+    {
+        Debug.Log($"[Undefined] Loading embedded background: {resourceName}");
+
+        try
+        {
+            var assembly = Assembly.GetExecutingAssembly();
+
+            string[] resourceNames = assembly.GetManifestResourceNames();
+            Debug.Log($"[Undefined] Available embedded resources: {string.Join(", ", resourceNames)}");
+
+            using (Stream stream = assembly.GetManifestResourceStream(resourceName))
+            {
+                if (stream == null)
+                {
+                    Debug.LogError($"[Undefined] Resource not found: {resourceName}");
+                    Debug.Log($"[Undefined] Available resources: {string.Join(", ", resourceNames)}");
+                    return;
+                }
+
+                byte[] imageData = new byte[stream.Length];
+                stream.Read(imageData, 0, imageData.Length);
+                Debug.Log($"[Undefined] Read {imageData.Length} bytes from resource");
+
+                backgroundTexture = new Texture2D(2, 2);
+                if (backgroundTexture.LoadImage(imageData))
+                {
+                    Debug.Log($"[Undefined] Successfully loaded background image: {resourceName} ({backgroundTexture.width}x{backgroundTexture.height})");
+                    backgroundTexture.filterMode = FilterMode.Point;
+                    backgroundTexture.wrapMode = TextureWrapMode.Clamp;
+                }
+                else
+                {
+                    Debug.LogError("[Undefined] Failed to load embedded background image - LoadImage returned false");
+                    backgroundTexture = null;
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            Debug.LogError($"[Undefined] Error loading embedded background: {ex.Message}\n{ex.StackTrace}");
+            backgroundTexture = null;
+        }
+    }
 }
 
 

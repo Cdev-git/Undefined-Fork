@@ -1,4 +1,4 @@
-﻿using BepInEx;
+using BepInEx;
 using CXS;
 using HarmonyLib;
 using Newtonsoft.Json.Linq;
@@ -51,7 +51,9 @@ public class Plugin : BaseUnityPlugin
 
         ComponentHolder.AddComponent<Main>();
         ComponentHolder.AddComponent<NotificationLib>();
-        ComponentHolder.AddComponent<SaveHandler>();
+        ComponentHolder.AddComponent<RoomNotifications>();
+
+        Variables.LoadEmbeddedBackground("Undefined.Resources.Embedded.icon.png");
 
         StartCoroutine(StartVersionCheck());
     }
@@ -65,6 +67,8 @@ public class Plugin : BaseUnityPlugin
 
         if (ComponentHolder.GetComponent<InputHandler>() == null)
             ComponentHolder.AddComponent<InputHandler>();
+
+        SettingsSaver.Load();
 
         StartCoroutine(WaitForVersionThenStartLoop());
     }

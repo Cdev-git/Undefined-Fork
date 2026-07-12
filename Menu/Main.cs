@@ -65,8 +65,8 @@ public class Main : MonoBehaviour
                 {
                     PositionMenu(rightHanded, keyboardOpen);
 
-                    bool leftTrig = InputHandler.Instance.LeftTrigger.WasPressed;
-                    bool rightTrig = InputHandler.Instance.RightTrigger.WasPressed;
+                    bool leftTrig = InputHandler.Instance.LeftTrigger.WasPressed || (pcMenu && UnityInput.Current.GetKey(KeyCode.Z));
+                    bool rightTrig = InputHandler.Instance.RightTrigger.WasPressed || (pcMenu && UnityInput.Current.GetKey(KeyCode.C));
 
                     if (leftTrig && !prevLeftTrigger)
                     {
@@ -387,6 +387,11 @@ public class Main : MonoBehaviour
 
     public static void RebuildMenu()
     {
+        if (activeCategory == 3)
+        {
+            EnabledMods.UpdateCategory();
+        }
+
         if (activeMenu != null)
         {
             Destroy(activeMenu);
@@ -532,6 +537,7 @@ public class Main : MonoBehaviour
             Debug.LogError($"{text} does not exist");
         }
         RebuildMenu();
+        SettingsSaver.Save();
     }
 
     public static ButtonInfo FindButton(string text)
