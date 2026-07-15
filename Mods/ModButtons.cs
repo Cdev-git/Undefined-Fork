@@ -107,6 +107,7 @@ public class ModButtons
             new ButtonInfo { buttonText = "Fireworks Sound Spam", method = () => Fireworks(), isTogglable = true},
             new ButtonInfo { buttonText = "Bouncy Sound Spam", method = () => Bouncythings(), isTogglable = true},
             new ButtonInfo { buttonText = "Voting Rock Sound Spam", method = () => Voting_Rock(), isTogglable = true},
+            new ButtonInfo { buttonText = "AK47", method = () => AK_47(), isTogglable = true},
             new ButtonInfo { buttonText = "Sound ID", isTogglable = false, isIncremental = true, incrementalDisplayName = "ID", incrementalValues = SoundMods.soundOptions, incrementalMethod = SoundMods.SetSound, toolTip = "Selects the sound ID (1-324)." },
             new ButtonInfo { buttonText = "Sound Spam", method = () => PlaySelectedSound(), isTogglable = true, toolTip = "Spams the selected sound ID." },
          
