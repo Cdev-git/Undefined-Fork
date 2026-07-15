@@ -1,7 +1,9 @@
-﻿using GorillaLocomotion;
+using GorillaLocomotion;
 using Photon.Pun;
 using System.Collections.Generic;
 using UnityEngine;
+using static Undefined.Patches.EffectDataPatch;
+using static Undefined.Plugin;
 
 namespace Undefined.Mods.Categories;
 
@@ -9,14 +11,13 @@ public class SoundMods
 {
     private static float Sound_delay;
 
-        public static List<string> soundOptions = BuildSoundOptions();
+        public static List<string> soundOptions = new List<string>();
         public static int currentSoundId = 1;
-
-        static List<string> BuildSoundOptions()
+        
+        public static void PopulateSoundOptions()
         {
-            var list = new List<string>();
-            for (int i = 1; i <= GTPlayer.Instance.materialData.Count; i++) list.Add(i.ToString());
-            return list;
+            soundOptions.Clear();
+            for (int i = 1; i <= allsoundsids; i++) soundOptions.Add(i.ToString());
         }
 
         public static void SetSound(string value) { if (int.TryParse(value, out int id)) currentSoundId = id; }
@@ -81,4 +82,8 @@ public class SoundMods
         public static void Crystal() => Sound(Random.Range(40, 54));
         public static void Wolf() => Sound(Random.Range(156, 157));
         public static void Voting_Rock() => Sound(287);
-}
+        public static void AK_47()
+        {
+            Sound(39);
+            Sound(30);
+        } 
