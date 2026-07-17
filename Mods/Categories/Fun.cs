@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Text;
 using Undefined.Utilities;
 using UnityEngine;
+using static Undefined.Utilities.Hoverboard;
 
 namespace Undefined.Mods.Categories;
 
@@ -68,5 +69,27 @@ public class Fun
         var G = Mathf.Sin(time + 2f * Mathf.PI / 3f) * 0.5f + 0.5f;
         var B = Mathf.Sin(time + 4f * Mathf.PI / 3f) * 0.5f + 0.5f;
         GorillaTagger.Instance.myVRRig.SendRPC("RPC_InitializeNoobMaterial", RpcTarget.All, new object[] { R, G, B });
+    }
+
+    
+    
+    public static void Rainbowhoverboard()
+    {
+        if (VRRig.LocalRig.hoverboardVisual.IsHeld)
+        {
+            float time = Time.time * 1.8f;
+            var R = Mathf.Sin(time) * 0.5f + 0.5f;
+            var G = Mathf.Sin(time + 2f * Mathf.PI / 3f) * 0.5f + 0.5f;
+            var B = Mathf.Sin(time + 4f * Mathf.PI / 3f) * 0.5f + 0.5f;
+            Color RGB = new Color(R, G, B);
+            VRRig.LocalRig.hoverboardVisual.SetIsHeld(Hand, HandPosition, HandRotation, RGB);
+        }
+    }
+    
+    public static void Colorhoverboard(Color color)
+    {
+        if (!IsHeld) return;
+        
+        VRRig.LocalRig.hoverboardVisual.SetIsHeld(Hand, HandPosition, HandRotation, color);
     }
 }
