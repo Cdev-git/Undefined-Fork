@@ -291,6 +291,20 @@ public class Movement
     {
         GTPlayer.Instance.disableMovement = true;
     }
+
+    public static void Speedboost(bool Mosa)
+    {
+        if (Mosa)
+        {
+            GTPlayer.Instance.maxJumpSpeed = 6.3f;
+            GTPlayer.Instance.jumpMultiplier = 6.2f;
+        }
+        
+        GTPlayer.Instance.maxJumpSpeed = 7f;
+        GTPlayer.Instance.jumpMultiplier = 6.8f;
+    }
+    
+    
     public static void PbbvWalkDisable()
     {
         GTPlayer.Instance.disableMovement = false;

@@ -18,8 +18,6 @@ public class Variables
 {
     public static string serverLink = "https://discord.gg/Bq94vsUtGk";
 
-    public static string CosmeticsOwned;
-
     public static GameObject keyclickerObj1;
 
     public static GameObject keyclickerObj2;

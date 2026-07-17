@@ -1,7 +1,7 @@
 ﻿namespace Undefined.Utilities;
 using UnityEngine;
 
-public struct Hoverboard
+public struct Hoverboard_Stuff
 {
     public static bool Hand = VRRig.LocalRig.hoverboardVisual.IsLeftHanded;
     public static Vector3 HandPosition = VRRig.LocalRig.hoverboardVisual.NominalLocalPosition;
