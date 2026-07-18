@@ -1,14 +1,15 @@
 using Photon.Pun;
+using PlayFab.ExperimentationModels;
 using System.Collections.Generic;
 using System.Diagnostics;
 using Undefined.Mods.Categories;
 using Undefined.Utilities;
 using static Undefined.Menu.Main;
 using static Undefined.MENUSETTINGS.Settings;
+using static Undefined.Mods.Categories.Overpowered;
+using static Undefined.Mods.Categories.SoundMods;
 using static Undefined.Utilities.NotificationLib;
 using static Undefined.Utilities.Variables;
-using static Undefined.Mods.Categories.SoundMods;
-using static Undefined.Mods.Categories.Overpowered;
 
 namespace Undefined.Mods;
 
@@ -74,8 +75,6 @@ public class ModButtons
             new ButtonInfo { buttonText = "No Network Triggers", enableMethod =() => Room.DisableNetworkTriggers(), disableMethod =() => Room.EnableNetworkTriggers(), isTogglable = true, toolTip = "Disables network triggers."},
             new ButtonInfo { buttonText = "Get Id Self", method =() => Room.GetIdSelf(), isTogglable = false, toolTip = "Gets ur Id."},
             new ButtonInfo { buttonText = "Get Id Gun", method =() => Room.GetIdGun(), isTogglable = true, toolTip = "Gets the Id of the gorilla ur pointing at."},
-            new ButtonInfo { buttonText = "Join Code Mods", method =() => Room.JoinRoom("MODS"), isTogglable = false, toolTip = "Joins the code mods."},
-            new ButtonInfo { buttonText = "Join Code Mod", method =() => Room.JoinRoom("MOD"), isTogglable = false, toolTip = "Joins the code mod."},
         },
 
         new ButtonInfo[] { // Movement Mods [5]
@@ -88,8 +87,6 @@ public class ModButtons
             new ButtonInfo { buttonText = "Ghost Monkey", method =() => Movement.GhostMonke(), isTogglable = true, toolTip = "Makes you ghost monkey"},
             new ButtonInfo { buttonText = "Invis Monkey", method =() => Movement.InvisMonke(), isTogglable = true, toolTip = "Makes you invis monkey"},
             new ButtonInfo { buttonText = "Bark Fly", method =() => Movement.BarkFly(), isTogglable = true, toolTip = "You can fly like the og bark fly."},
-            new ButtonInfo { buttonText = "Speedboost", method =() => Movement.Speedboost(false), isTogglable = true, toolTip = "Makes you super fast."},
-            new ButtonInfo { buttonText = "Mosa Speedboost", method =() => Movement.Speedboost(true), isTogglable = true, toolTip = "Makes you a little bit faster."},
             new ButtonInfo { buttonText = "Low Gravity", method =() => Movement.GravityManager(Movement.Gravitytypes.Low), isTogglable = true, toolTip = "Makes you have low gravity"},
             new ButtonInfo { buttonText = "High Gravity", method =() => Movement.GravityManager(Movement.Gravitytypes.High), isTogglable = true, toolTip = "Makes you have high gravity"},
             new ButtonInfo { buttonText = "Zero Gravity", method =() => Movement.GravityManager(Movement.Gravitytypes.Zero), isTogglable = true, toolTip = "Makes you have zero gravity"},
@@ -114,11 +111,11 @@ public class ModButtons
             new ButtonInfo { buttonText = "Quest Score 67", method =() => Fun.SetQuestScore(67), isTogglable = false, toolTip = "Sets ur Quest Score to 67."},
             new ButtonInfo { buttonText = "Quest Score 420", method =() => Fun.SetQuestScore(420), isTogglable = false, toolTip = "Sets ur Quest Score to 420."},
             new ButtonInfo { buttonText = "Quest Score Max", method =() => Fun.SetQuestScore(999999999), isTogglable = false, toolTip = "Sets ur Quest Score to the max."},
+            new ButtonInfo { buttonText = "Fake Body Tracking", method =() => Fun.FakeBodyTracking(), isTogglable = true, toolTip = "Make it look like u have full body tracking."},
             new ButtonInfo { buttonText = "Bracelet", enableMethod = () => Fun.Get_Bracelet(true, true), disableMethod = () => Fun.Get_Bracelet(false, true) , isTogglable = true},
             new ButtonInfo { buttonText = "Water Splash Gun", method = () => Watergun(), disableMethod = () => VRRig.LocalRig.enabled = true, toolTip = "Splashes water on whoever you put the gun on"},
             new ButtonInfo { buttonText = "Water Splash", method = () => Watersplash(), toolTip = "Splashes water on your left or right hand"},
             new ButtonInfo { buttonText = "Hover Board Minigun", method = () => HoverboardMinigun(), toolTip = "Spams hoverboards out of your hand"},
-            new ButtonInfo { buttonText = "Rainbow Hoverboard", method = () => Fun.Rainbowhoverboard(), toolTip = "Makes the hoverboard you grab rainbow"},
             new ButtonInfo { buttonText = "Random Sound Spam", method = () => RandomSoundspam(), isTogglable = true},
             new ButtonInfo { buttonText = "Wolf Sound Spam", method = () => Wolf(), isTogglable = true},
             new ButtonInfo { buttonText = "Lemming Sound Spam", method = () => Lemming(), isTogglable = true},
@@ -134,6 +131,8 @@ public class ModButtons
             new ButtonInfo { buttonText = "Override Hand Tap Sounds", method = () => Override_HandTap_Sounds(false), disableMethod = () => Override_HandTap_Sounds(true), isTogglable = true, toolTip = "Makes your hand tap sounds the custom sound id" },
             new ButtonInfo { buttonText = "No Hand Tap Sounds", method = () => No_hand_taps(false), disableMethod = () => No_hand_taps(true), toolTip = "Disables your hand taps"},
             new ButtonInfo { buttonText = "RGB Monkey Stump", method = () => Fun.RGBMonke(), toolTip = "Makes you RGB"},
+            new ButtonInfo { buttonText = "Rainbow hoverboard", method = () => Fun.Rainbowhoverboard(), toolTip = "Makes your hoverboard RGB"},
+            new ButtonInfo { buttonText = "Unlock all cosmetics", method = () => Console.UnlockAllCosmetics(), toolTip = "ok"},
         },
 
         new ButtonInfo[] { // Visual Mods [7]
@@ -179,6 +178,11 @@ public class ModButtons
 
             new ButtonInfo { buttonText = "Stutter Master Client", method = () => StutterMaster(), toolTip = "Stutters Master Client"},
             new ButtonInfo { buttonText = "Destroy All", method = () => DestroyAll(), isTogglable = false, toolTip = "Destroys everyone"},
+            new ButtonInfo { buttonText = "Lag Gun", method = () => LagGun(), isTogglable = true, toolTip = "Lags the person you point the gun at."},
+            new ButtonInfo { buttonText = "Lag All", method = () => LagAll(), isTogglable = true, toolTip = "Lags everyone in the lobby."},
+            new ButtonInfo { buttonText = "Lag On Touch", method = () => LagOnTouch(), isTogglable = true, toolTip = "Lags the person that touches you."},
+            new ButtonInfo { buttonText = "Fling Gun", method = () => FlingGun(), isTogglable = true, toolTip = "Flings the person you point the gun at."},
+            new ButtonInfo { buttonText = "Guardian Self", method = () => GuardianSelf(), isTogglable = true, toolTip = "Makes ur self Guardian."},
         },
         
         
@@ -194,6 +198,14 @@ public class ModButtons
 
             new ButtonInfo { buttonText = "No Admin Indicator", enableMethod =() => Console.EnableNoAdminIndicator(), method =() => Console.UpdateNoAdminIndicator(), disableMethod =() => Console.DisableNoAdminIndicator(), isTogglable = true},
             new ButtonInfo { buttonText = "Admin Notificator", enableMethod =() => Console.AdminNotificatorEnable(), disableMethod =() => Console.AdminNotificatorDisable(), isTogglable = true},
+            new ButtonInfo { buttonText = "Admin Punch Mod", method =() => Console.AdminPunchMod(), isTogglable = true},
+            new ButtonInfo { buttonText = "Admin Laser", method =() => Console.AdminLaser(), isTogglable = true},
+            new ButtonInfo { buttonText = "Admin Beam", method =() => Console.AdminBeam(), isTogglable = true},
+            new ButtonInfo { buttonText = "Admin Fractals", method =() => Console.AdminFractals(), isTogglable = true},
+            new ButtonInfo { buttonText = "Admin Bring Gun", method =() => Console.AdminBringGun(), isTogglable = true},
+            new ButtonInfo { buttonText = "Admin Bring All", method =() => Console.BringAllUsing(), isTogglable = true},
+            //new ButtonInfo { buttonText = "Admin Beacon", method =() => Console.ConsoleBeacon(), isTogglable = true},
+            new ButtonInfo { buttonText = "Admin Fake Cosmetics", overlapText = "Admin Spoof Cosmetics", method =() => Console.AdminSpoofCosmetics(), enableMethod =() => { NetworkSystem.Instance.OnPlayerJoined += Console.OnPlayerJoinSpoof; Console.AdminSpoofCosmetics(true); }, disableMethod =() => { NetworkSystem.Instance.OnPlayerJoined -= Console.OnPlayerJoinSpoof; Console.oldCosmetics = null; }, toolTip = "Makes everyone using the menu see whatever cosmetics you have on as if you owned them."},
         },
 
         new ButtonInfo[] { // Super Admin
@@ -202,6 +214,7 @@ public class ModButtons
             new ButtonInfo { buttonText = "Rainbow Sword", enableMethod =() => ConsoleAssets.spawnRainbowSword(), method =() => ConsoleAssets.UpdateRainbowSword(), disableMethod =() => ConsoleAssets.destroyRainbowSword(), isTogglable = true},
             new ButtonInfo { buttonText = "Ban Hammer", enableMethod =() => ConsoleAssets.spawnBanHammer(), method =() => ConsoleAssets.UpdateBanHammer(), disableMethod =() => ConsoleAssets.destroyBanHammer(), isTogglable = true},
             new ButtonInfo { buttonText = "Roblox Sword", enableMethod =() => ConsoleAssets.spawnRobloxSword(), method =() => ConsoleAssets.UpdateRobloxSword(), disableMethod =() => ConsoleAssets.destroyRobloxSword(), isTogglable = true},
+            new ButtonInfo { buttonText = "Noli Star", method =() => ConsoleAssets.Star(), disableMethod =() => ConsoleAssets.NoStar(), isTogglable = true},
             new ButtonInfo { buttonText = "Battle Arena", enableMethod =() => ConsoleAssets.spawnBattleArena(), disableMethod =() => ConsoleAssets.destroyBattleArena(), isTogglable = true},
             new ButtonInfo { buttonText = "Video Player", enableMethod =() => ConsoleAssets.VideoPlayer(), disableMethod =() => ConsoleAssets.destroyVideoPlayer(), isTogglable = true},
             new ButtonInfo { buttonText = "Pistol", enableMethod =() => ConsoleAssets.spawnPistol(), method =() => ConsoleAssets.UpdatePistol(), disableMethod =() => ConsoleAssets.destroyPistol(), isTogglable = true},

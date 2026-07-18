@@ -104,6 +104,22 @@ public class RigManager
 
 public static class extarstuff
 {
+    public static NetPlayer GetPlayerFromID(string id) =>
+        PhotonNetwork.PlayerList.FirstOrDefault(player => player.UserId == id);
+
+    public static VRRig GetVRRigFromPlayer(NetPlayer p) =>
+    GorillaGameManager.StaticFindRigForPlayer(p);
+
+    public static NetPlayer GetPlayerFromVRRig(VRRig p) =>
+        p.Creator ?? NetworkSystem.Instance.GetPlayer(NetworkSystem.Instance.GetOwningPlayerID(p.rigSerializer.gameObject));
+
+    public static VRRig GhostRig;
+
+    public static NetworkView GetNetViewFromVRRig(VRRig VRRig)
+    {
+        return (NetworkView)Traverse.Create(VRRig).Field("netView").GetValue();
+    }
+
     public static NetPlayer GetPlayer(this VRRig rig) =>
     RigManager.GetPlayerFromVRRigg(rig);
 

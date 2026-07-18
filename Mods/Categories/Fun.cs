@@ -4,10 +4,8 @@ using Photon.Realtime;
 using System;
 using System.Collections.Generic;
 using System.Text;
-using GorillaLocomotion;
 using Undefined.Utilities;
 using UnityEngine;
-using static Undefined.Utilities.Hoverboard_Stuff;
 
 namespace Undefined.Mods.Categories;
 
@@ -47,27 +45,6 @@ public class Fun
     {
         VRRig.LocalRig.SetQuestScore(score);
     }
-    
-    public static void Rainbowhoverboard()
-    {
-        if (VRRig.LocalRig.hoverboardVisual.IsHeld)
-        {
-            float time = Time.time * 1.8f;
-            var R = Mathf.Sin(time) * 0.5f + 0.5f;
-            var G = Mathf.Sin(time + 2f * Mathf.PI / 3f) * 0.5f + 0.5f;
-            var B = Mathf.Sin(time + 4f * Mathf.PI / 3f) * 0.5f + 0.5f;
-            Color RGB = new Color(R, G, B);
-            VRRig.LocalRig.hoverboardVisual.SetIsHeld(Hand, HandPosition, HandRotation, RGB);
-        }
-    }
-    
-
-    public static void Colorhoverboard(Color color)
-    {
-        if (!IsHeld) return;
-        
-        VRRig.LocalRig.hoverboardVisual.SetIsHeld(Hand, HandPosition, HandRotation, color);
-    }
 
     public static void Get_Bracelet(bool Enable, bool isleft)
     {
@@ -82,6 +59,13 @@ public class Fun
         }
     }
 
+    public static void FakeBodyTracking()
+    {
+        GorillaTagger.Instance.offlineVRRig.transform.rotation = Camera.main.transform.rotation;
+        GorillaTagger.Instance.offlineVRRig.leftHand.rigTarget.position = Variables.playerInstance.LeftHand.handFollower.transform.position;
+        GorillaTagger.Instance.offlineVRRig.rightHand.rigTarget.position = Variables.playerInstance.RightHand.handFollower.transform.position;
+    }
+
     public static void RGBMonke()
     {
         float time = Time.time * 1.8f;
@@ -90,4 +74,32 @@ public class Fun
         var B = Mathf.Sin(time + 4f * Mathf.PI / 3f) * 0.5f + 0.5f;
         GorillaTagger.Instance.myVRRig.SendRPC("RPC_InitializeNoobMaterial", RpcTarget.All, new object[] { R, G, B });
     }
+
+    public static void Rainbowhoverboard()
+    {
+        if (Hoverboard_Stuff.IsHeld)
+        {
+            float time = Time.time * 1.8f;
+            var R = Mathf.Sin(time) * 0.5f + 0.5f;
+            var G = Mathf.Sin(time + 2f * Mathf.PI / 3f) * 0.5f + 0.5f;
+            var B = Mathf.Sin(time + 4f * Mathf.PI / 3f) * 0.5f + 0.5f;
+            Color RGB = new Color(R, G, B);
+            VRRig.LocalRig.hoverboardVisual.SetIsHeld(Hoverboard_Stuff.Hand, Hoverboard_Stuff.HandPosition, Hoverboard_Stuff.HandRotation, RGB);
+        }
+    }
+
+    public static void Colorhoverboard(Color color)
+    {
+        if (!Hoverboard_Stuff.IsHeld) return;
+
+        VRRig.LocalRig.hoverboardVisual.SetIsHeld(Hoverboard_Stuff.Hand, Hoverboard_Stuff.HandPosition, Hoverboard_Stuff.HandRotation, color);
+    }
+}
+
+public struct Hoverboard_Stuff
+{
+    public static bool Hand = VRRig.LocalRig.hoverboardVisual.IsLeftHanded;
+    public static Vector3 HandPosition = VRRig.LocalRig.hoverboardVisual.NominalLocalPosition;
+    public static Quaternion HandRotation = VRRig.LocalRig.hoverboardVisual.NominalLocalRotation;
+    public static bool IsHeld = VRRig.LocalRig.hoverboardVisual.IsHeld;
 }

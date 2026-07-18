@@ -259,12 +259,10 @@ public class Movement
             VRRig.LocalRig.enabled = true;
         }
     }
-    
-    
 
     public static void NoClip()
     {
-        bool DisableColliders = InputHandler.Instance.RightPrimary.IsPressed;
+        bool DisableColliders = InputHandler.Instance.RightTrigger.IsPressed;
         MeshCollider[] colliders = Resources.FindObjectsOfTypeAll<MeshCollider>();
 
         foreach (MeshCollider collider in colliders)
@@ -291,20 +289,6 @@ public class Movement
     {
         GTPlayer.Instance.disableMovement = true;
     }
-
-    public static void Speedboost(bool Mosa)
-    {
-        if (Mosa)
-        {
-            GTPlayer.Instance.maxJumpSpeed = 6.3f;
-            GTPlayer.Instance.jumpMultiplier = 6.2f;
-        }
-        
-        GTPlayer.Instance.maxJumpSpeed = 7f;
-        GTPlayer.Instance.jumpMultiplier = 6.8f;
-    }
-    
-    
     public static void PbbvWalkDisable()
     {
         GTPlayer.Instance.disableMovement = false;
@@ -364,6 +348,7 @@ public class Movement
         {
             if (InputHandler.Instance.RightPrimary.WasPressed)
             {
+                Noclipistuff(true);
                 checkpoint.GetComponent<Renderer>().material.color = Color.gray;
 
                 Variables.TeleportPlayer(checkpoint.transform.position);
@@ -372,6 +357,7 @@ public class Movement
             else
             {
                 checkpoint.GetComponent<Renderer>().material.color = Color.navyBlue;
+                Noclipistuff(false);
             }
         }
     }
