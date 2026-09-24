@@ -91,6 +91,7 @@ public class Plugin : BaseUnityPlugin
         ComponentHolder.AddComponent<DiscordPresence>();
         ComponentHolder.AddComponent<SearchAndKeyboard>();
         ComponentHolder.AddComponent<SoundBoard>();
+        ComponentHolder.AddComponent<RoomJoiner>();
 
         Variables.LoadEmbeddedBackground("Undefined.Resources.Embedded.icon.png");
 

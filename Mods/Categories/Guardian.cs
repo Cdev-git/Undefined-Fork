@@ -169,7 +169,54 @@ public class Guardian
         }
     }
     
-        private static float delay = 0.5f;
+    public static void GuardianGun()
+    {
+        GunLib.StartGun(() =>
+        {
+            VRRig target = GunLib.LockedPlayer;
+            if (target == null || target.isLocal || target.Creator == null)
+                return;
+
+            if (Time.time <= guarddelay)
+                return;
+            guarddelay = Time.time + 0.1f;
+
+            try
+            {
+
+                GorillaGuardianZoneManager zone = UnityEngine.Object.FindObjectOfType<GorillaGuardianZoneManager>();
+                if (zone != null)
+                    zone.SetGuardian(target.Creator);
+            }
+            catch { }
+        }, true);
+    }
+
+    private static float guarddelay;
+    public static void UnguardianGun()
+    {
+        GunLib.StartGun(() =>
+        {
+            VRRig target = GunLib.LockedPlayer;
+            if (target == null || target.isLocal || target.Creator == null)
+                return;
+
+            if (Time.time <= guarddelay)
+                return;
+            guarddelay = Time.time + 0.1f;
+
+            try
+            {
+
+                foreach (var zone in GorillaGuardianZoneManager.zoneManagers
+                             .Where(z => z.enabled && z.IsZoneValid() && z.CurrentGuardian == target.Creator))
+                    zone.SetGuardian(null);
+            }
+            catch { }
+        }, true);
+    }
+    
+    private static float delay = 0.5f;
 
     public static void GuardianBreakMovementAll()
     {

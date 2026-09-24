@@ -227,6 +227,8 @@ public static class ModButtons
         {
             Back(Category.MasterMods),
             new ModButtonInfo("Guardian Self", () => Guardian.GuardianSelf()),
+            new ModButtonInfo("Guardian Gun", () => Guardian.GuardianGun()),
+            new ModButtonInfo("UnGuardian Gun", () => Guardian.UnguardianGun()),
             new ModButtonInfo("Guardian Grab All", () => Guardian.GuardianGrabAll()),
             new ModButtonInfo("Guardian Spaz All", () => Guardian.GuardianSpazAll()),
             new ModButtonInfo("Guardian Fling All", () => Guardian.GuardianFlingAll()),

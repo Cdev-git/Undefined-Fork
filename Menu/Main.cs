@@ -5,6 +5,7 @@ using HarmonyLib;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Photon.Pun;
 using TMPro;
 using Undefined.Mods;
 using Undefined.Mods.Categories;
@@ -521,6 +522,15 @@ public class Main : MonoBehaviour
 
     public static void ProcessClick(string text)
     {
+        if (text == "Disconnect")
+        {
+            if (PhotonNetwork.InRoom)
+            {
+                PhotonNetwork.Disconnect();
+            }
+            return;
+        }
+        
         ModButtonInfo target = FindButton(text);
         if (target != null)
         {
