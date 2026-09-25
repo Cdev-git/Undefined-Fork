@@ -110,6 +110,8 @@ public class Plugin : BaseUnityPlugin
         if (ComponentHolder != null && ComponentHolder.GetComponent<InputHandler>() == null)
             ComponentHolder.AddComponent<InputHandler>();
 
+        ComponentHolder.AddComponent<UpdateWindow>();
+
         SettingsSaver.Load();
 
         StartCoroutine(WaitForVersionThenStartLoop());
