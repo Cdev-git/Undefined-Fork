@@ -574,5 +574,93 @@ public class Fun
         }
     }
     
-    
+    public static void UpsideDownHead()
+    {
+        GorillaTagger.Instance.offlineVRRig.head.trackingRotationOffset.z = 180f;
+    }
+
+    public static void BackwardsHead()
+    {
+        GorillaTagger.Instance.offlineVRRig.head.trackingRotationOffset.y = 180f;
+    }
+
+    public static void ResetHead()
+    {
+        GorillaTagger.Instance.offlineVRRig.head.trackingRotationOffset = Vector3.zero;
+    }
+
+    private static Vector3 rigOffset;
+
+    private static bool HoldRig()
+    {
+        VRRig rig = GorillaTagger.Instance.offlineVRRig;
+
+        if (!InputHandler.Instance.RightGrip.IsPressed)
+        {
+            rig.enabled = true;
+            return false;
+        }
+
+        if (rig.enabled)
+        {
+            rigOffset = rig.transform.position - GorillaTagger.Instance.bodyCollider.transform.position;
+            rig.enabled = false;
+        }
+
+        rig.transform.position = GorillaTagger.Instance.bodyCollider.transform.position + rigOffset;
+        rig.transform.rotation = Quaternion.Euler(0f, GorillaTagger.Instance.headCollider.transform.eulerAngles.y, 0f);
+        rig.head.rigTarget.transform.rotation = GorillaTagger.Instance.headCollider.transform.rotation;
+        return true;
+    }
+
+    private static void SetHands(Vector3 left, Vector3 right)
+    {
+        VRRig rig = GorillaTagger.Instance.offlineVRRig;
+
+        rig.leftHand.rigTarget.transform.position = left;
+        rig.rightHand.rigTarget.transform.position = right;
+
+        rig.leftHand.rigTarget.transform.rotation = rig.transform.rotation * Quaternion.Euler(rig.leftHand.trackingRotationOffset);
+        rig.rightHand.rigTarget.transform.rotation = rig.transform.rotation * Quaternion.Euler(rig.rightHand.trackingRotationOffset);
+    }
+
+    public static void FlapArms()
+    {
+        if (!HoldRig())
+            return;
+
+        Transform rig = GorillaTagger.Instance.offlineVRRig.transform;
+        Vector3 flap = Vector3.up * (Mathf.Sin(Time.time * 14f) * 0.35f);
+
+        SetHands(rig.position - rig.right * 0.55f + flap, rig.position + rig.right * 0.55f + flap);
+    }
+
+    public static void Clap()
+    {
+        if (!HoldRig())
+            return;
+
+        Transform rig = GorillaTagger.Instance.offlineVRRig.transform;
+        Vector3 front = rig.position + rig.forward * 0.35f + Vector3.up * 0.1f;
+        float gap = 0.05f + Mathf.Abs(Mathf.Sin(Time.time * 10f)) * 0.35f;
+
+        SetHands(front - rig.right * gap, front + rig.right * gap);
+    }
+
+    public static void Wave()
+    {
+        if (!HoldRig())
+            return;
+
+        Transform rig = GorillaTagger.Instance.offlineVRRig.transform;
+        Vector3 left = rig.position - rig.right * 0.3f - Vector3.up * 0.4f;
+        Vector3 right = rig.position + rig.right * (0.35f + Mathf.Sin(Time.time * 10f) * 0.15f) + Vector3.up * 0.45f;
+
+        SetHands(left, right);
+    }
+
+    public static void ResetRig()
+    {
+        GorillaTagger.Instance.offlineVRRig.enabled = true;
+    }
 }
